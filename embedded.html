@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Automatic Fullscreen Video Page</title>
+</head>
+<body>
+    <h1>Welcome to My Fullscreen Video Page</h1>
+    <!-- Replace the URL with the video's URL -->
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/t0Q2otsqC4I?si=Q0zWh0illstM48N8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <script>
+        const iframe = document.querySelector("iframe");
+
+        iframe.addEventListener("load", function() {
+            iframe.requestFullscreen();
+        });
+    </script>
+</body>
+</html>
