@@ -1,32 +1,1725 @@
-<!DOCTYPE html>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<script type="text/javascript">
+    var jQueryLoaded = true;
+</script>
+
+
+
+
+<script language="JavaScript" src="/webclient/vendor/js/jquery.js?build=6220" type="text/javascript"></script>
+<script language="JavaScript" src="/js/jquery-ui.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+var adsjQuery = jQuery.noConflict();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<link REL="SHORTCUT ICON" HREF='&#x2f;images&#x2f;logos&#x2f;ADSSPDesktop.ico'>
+<title>My Account</title>
+<script language="JavaScript" src="/js/form-util.js?build=6303"></script>
+<script language="JavaScript" src="/js/CommonUtil.js?build=6303"></script>
+<script>
+
+var jQueryLoaded = jQueryLoaded || false;
+if(!jQueryLoaded)
+{
+	var script = document.createElement( 'script' );
+	script.type = 'text/javascript';
+	script.src = "/webclient/vendor/js/jquery.js?build=6303";
+	if((window.name != "advancedPC_Frames") && (window.name != "advancedIDV_Frames")) //handled to avoid jquery-ui conflict, need to remove this check in future release
+	{
+		document.getElementsByTagName('head')[0].appendChild( script );
+	}
+
+	jQueryLoaded = true;
+
+
+	var fileNamePattern = '^[a-zA-Z0-9.\\-_ ]{0,255}$';
+	
+	addEvent(window, 'load', setFileConstraints, false); //NO I18N
+
+	function addEvent(element, eventString, functionReference, useCapture){
+		if (element.addEventListener) {
+		  element.addEventListener(eventString, functionReference, useCapture);
+		}
+		else if (element.attachEvent) {
+		  element.attachEvent('on'+eventString , functionReference );
+		}
+	}
+
+	function setFileConstraints()
+	{
+	try{
+		if(fileNamePattern != ''){
+			var tip = 'Filename should follow the regex pattern {0}'.replace('{0}', fileNamePattern);
+			var errorMsg = 'Invalid characters found in the file name. It should follow the regex pattern {0}'.replace('{0}', fileNamePattern);
+			var elements = document.getElementsByTagName('input');
+			for(i in elements){
+				var element = elements[i];
+				var elementType = element.type;
+				if(elementType == 'file' && element.getAttribute('patternText') == null){
+					element.setAttribute('patternText', fileNamePattern);
+					if(typeof setADSTooltip == 'function'){
+					setADSTooltip(element, tip);
+					}
+					else{
+						element.title = tip;
+					}
+
+					addEvent(element, 'change', function(event){ //NO I18N
+						var files = this.files;
+						for (var i = 0; i < files.length; i++) {
+							if(!(new RegExp(fileNamePattern)).test(files[i].name))
+							{
+								if(typeof preventDefaultAction == 'function'){
+									preventDefaultAction(event);
+								}
+								this.value = '';
+								if(typeof parent.alertMsg == 'function'){
+									parent.alertMsg(errorMsg);
+								}
+								else if(typeof alertMsg == 'function'){
+									alertMsg(errorMsg);
+								}
+								return false;
+							}
+						}
+					}, true);
+				}
+			}
+		}	
+		}
+		catch(err){}		
+	}
+}
+
+</script>
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+
+
+
+
+<script language="JavaScript" type="text/javascript" src="/js/jsencrypt.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/core.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/sha256.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/hmac.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/pbkdf2.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/cipher-core.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/enc-base64.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/aes.min.js"></script>
+
+<script>
+
+var AES_KEY_SIZE = 256;
+var AES_IV_SIZE  = 128;
+var AES_KEY_ITER_COUNT = 10;
+
+function encryptText(text)
+{
+    if(false)
+    {
+	   if(text.length <= 245)
+	   {
+		   var publicKey="-----BEGIN PUBLIC KEY-----"+ "" + "-----END PUBLIC KEY-----";//No I18N
+		   var jsEncryptObj = new JSEncrypt();
+		   jsEncryptObj.setPublicKey(publicKey);
+		   return jsEncryptObj.encrypt(text);
+	   }
+	   else
+	   {
+			var iv = CryptoJS.lib.WordArray.random(AES_IV_SIZE / 8).toString(CryptoJS.enc.Hex);
+			var salt = CryptoJS.lib.WordArray.random(AES_KEY_SIZE/ 8).toString(CryptoJS.enc.Hex);
+			var key = CryptoJS.PBKDF2("", CryptoJS.enc.Hex.parse(salt), { keySize: this.AES_KEY_SIZE / 32, iterations: this.AES_KEY_ITER_COUNT, hasher : CryptoJS.algo.SHA256 });
+            var encrypted = CryptoJS.AES.encrypt(text, key, { iv: CryptoJS.enc.Hex.parse(iv) });
+		    var ciphertext = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+			return  salt + iv + ciphertext;
+	   }
+    }
+    else
+    {
+       return text;
+    }
+
+}
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
 <head>
-    <title>GIF Background Example</title>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+
+    <link href="styles/adsf/flat/Style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/webclient/assets/login.css">
+    <link rel="stylesheet" href="/webclient/assets/app_overwrite.css">
+    
+    
+		<link rel="stylesheet" href="/styles/loginPageTheme.css">
+	
+	<link href="styles/customer-styles.css" rel="stylesheet" type="text/css"> 
+
     <style>
-        /* Set the <iframe> element to cover the entire viewport */
-        iframe {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1; /* Ensures it's in the background */
+        .fwsmart-card-login .fwsmart-card-icon
+        {
+            background: url(../images/adsf/common/flat-common-sprites-images.png) -164px -369px;
+            width: 20px;
+            height: 14px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 5px;
+            cursor: pointer;
         }
 
-        /* Add additional styling for content if needed */
-        .content {
-            text-align: center;
-            padding: 100px;
-            color: white;
-            font-size: 24px;
+        .text
+        {
+            background: none !important;
         }
     </style>
+
+    
+    <script type="text/javascript" src="/webclient/vendor/js/jquery.js?build=6303"></script>
+    <script>
+        var flatThemeJquery = $;
+    </script>
+    <script type="text/javascript" src="/webclient/vendor/js/bootstrap.js?build=6303"></script>
+    <script type="text/javascript" src="/webclient/vendor/js/bootstrap-select.min.js"></script>
+    <script language="JavaScript" src="/adsf/js/common/JumpTo.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/adsf/js/common/sso/CustomSSO.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/adsf/js/common/WindowHandler.js"></script>
+    <script language=JavaScript src="/js/report.js?build=6303"></script>
+    <script language=JavaScript src="/js/form-util.js?build=6303"></script>
+    <script language=JavaScript src="/js/Esearch.js?build=6303"></script>
+    <script language=JavaScript src="/js/common/LanguageList.js?build=6303" ></script>
+    <script language=JavaScript src="/js/layout/Utils.js?build=6303"></script>
+    <script type="text/javascript" src="/js/AjaxAPI.js?build=6303"></script>
+    <script type="text/javascript" src="/js/ValidateLogon.js?build=6303"></script>
+    <script type="text/javascript" src="/js/jquery.mousewheel.js?build=6303"></script>
+    <script type="text/javascript" src="/webclient/vendor/js/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <script language="JavaScript" type="text/JavaScript">
+		var contextPath = '';
+        var hideCap = 1;
+        var isPasswordChanged = 'true';
+        var jsTitleMsg=eval({"adssp_admin_gina_err_incorrect":"Incorrect function","ads_admin_product_settings_ha_master_service_not_installed":"{0} Service is not Installed in Primary Server.","adssp_admin_configuration_tech_alert_pwd_length":"Password length should be at least 7 characters","ads_admin_product_settings_ha_slave_service_not_privileged":"Please configure the {0} service with domain admins privilege in the standby server.","adssp_configuration_ppe_dict_spec":"Please make sure that the words in the dictionary file are separated by a new line.","adssp_config_admin_tools_helpdesk_all_policies":"All policies","adssp_admin_config_pwd_sync_automatic_link_alert_ibmas400":"User accounts will be automatically linked  if the usernames are the same in both AD and IBM i/AS400 System.","adssp_admin_logon_customize_dragndrop_htmlarea_italic":"Italic","adssp_license_expiry_available_count_unlimited":"This option will not work if you have the unlimited users license applied.","adssp_admin_general_server_settgs_not_find_host":"Invalid Server Name! Please Try Again with a different Server Name.","adssp_admin_policies_scheduler_soon_to_expire_msg_fourth_templete":"Dear %userName%,\\n\\nDespite all the reminders, you have still not changed your password, which will expire on %dateTime%. If you do not change it now, you might find yourself locked out of your computer! Please change it immediately.\\n\\nRegards\\nAdministrator","adssp_admin_logon_customize_dragndrop_htmlarea_fontsize_3_point":"3 (12 pt)","adssp_reports_enroll_rep_select_enroll_type_msg":"Please select an Enrollment type","adssp_config_admin_tools_helpdesk_popup_head_reason":"Reason","ads_admin_product_settings_ha_master_down":"{0} in the primary server is down. Please make sure it is up and running.","ads_iamapps_custom_saml_choose_sso_mode":"Please choose SSO flow","adssp_admin_config_mfa_enable_qr_auth":"Enable QR Code-based Authentication","adssp_admin_gina_couldnot_parse_server_install_path":"Could not parse server install path","adssp_admin_config_pwd_sync_automatic_link_alert_hpux":"User accounts will be automatically linked  if the usernames are the same in both AD and HP UX system.","adssp_config_admin_tools_helpdesk_que_mapped_in_mfa_confirm_edit_text":"This question is also used in multi-factor authentication. Are you sure you want to edit this question?","adssp_admin_selfupdate_layout_custom_fields_cannot_empty":"Fields cannot be empty","adssp_config_gs_select_users":"Click plus icon to select users.","adssp_admin_server_settings_vpn_client_location":"Please enter VPN client location","adssp_js_calendar_month_nov":"November","adssp_config_management_gina_custom_ppe_popup_tip":"Users can see the enforced password rules in a separate dialog box.","adssp_admin_system_utililites_save_changes":"Do you want to save changes for the current domain?","adssp_configuration_admin_tools_ext_dat_source_invalid_query":"Invalid Query. Verify if the query follows the mentioned format in note.","adssp_configuration_soon_to_exp_enable_html":"Enable HTML","adssp_admin_general_server_settgs_from_address_avoid_colon":"Display Name cannot contain colon(:), comma(,) and semi-colon(;).","adssp_selfservice_gs_subscribe_error_try_again":"Please try again","adssp_common_text_more_reports":"Click for more reports","adssp_admin_config_mfa_disable_qr_auth":"Disable QR Code-based Authentication","adssp_admin_server_settings_from_address_end_start":"The double Quotes in display name should be completed.","adssp_common_text_more":"more","adssp_domain_user_my_info_photo_upload_invalid_dimensions":"Invalid dimensions","adssp_admin_server_settings_mail_enter_pwd":"Please enter the Password","ads_common_text_save":"Save","ads_configuration_mdm_not_valid_mail_domain":"Please enter a valid mail domain address.","adssp_domain_user_reset_qa_sel_ques_alert_same_ques":"Questions found to be same","adssp_layout_admin_logon_settings_mobile_tab_photo_upload_invalid_format":"Invalid file format [valid images:jpg, jpeg, bmp, png, gif]","adssp_configuration_admin_tool_quick_enroll_enable_push_notification":"Enabling Push Notification is must. So please enable 'Push Notification' first.","adssp_domain_user_my_info_photo_upload_size_exceeded":"Size exceeded","adssp_config_mfa_remove_configuration_confirm_msg":"Are you sure you want to remove the configuration ?","adssp_configuration_sulayout_phone_format_invalid_allowed_value":"Please only use allowed values similar to phone number format.","InvalidFileFormat":"Invalid file format. Enter a CSV file.","adssp_login_tfa_alert_no_username_in_radius_pattern":"Please make sure that you select <b>user_name or USER_NAME<\/b> as one of the attribute for Username Pattern.","adssp_admin_customize_db_backup_schedule_support_with_default_only":"<span class=\\\"redtxtbold\\\">PS: <\/span>At present, the auto back-up facility is available only for the product-default database.","adssp_admin_server_settings_vpn_port_no":"Enter a valid port no","adssp_admin_config_mail_attachment_remove_success":"Successfully removed","unknown_error":"Unknown error Occurred","adssp_domain_user_change_pwd_alert_old_pwd":"Please enter the Old Password.","adssp_configure_policy_config_apc_umcp_onreset_alert":"This settings will not be enforced for users with Password never expires option enabled in AD.","adssp_configuration_ppe_only_for_cp_not_for_rp":"This rule applies only to change password tasks; does not apply to reset password.","adssp_config_step_running":"Running","adssp_config_sulayout_rule_del_confirm":"Are you sure want to delete this Rule?","ads_admin_product_settings_ha_modify_access_url":"Access URL has been modified. Kindly update the server name to virtual address.","adssp_layout_admin_logon_settings_mobile_tab_photo_upload_valid_format_help":"Valid images:jpg, jpeg, bmp, png, gif. \\n NOTE: Animated gif will not have motion on the mobile app","adssp_export_settings_photo_upload_size_exceeded":"Image size exceeds the allowed limit: 2MB. Please upload a smaller image.","close":"Close","adssp_common_alert_mail_format_empty":"Please don't leave the mail domain empty","adssp_js_calendar_month_aug":"August","ads_admin_product_settings_ha_public_name_not_valid":"Invalid virtual Host name.","ads_admin_product_settings_ha_master_service_not_privileged":"Please configure the {0} service with domain admins privilege in the primary server.","adssp_admin_customize_db_backup_schedule_already_bkup_process_running":"A DB backup process is in progress already.","ads_admin_smartcard_please_alert_are_you_sure_want_to_delete_ca":"Are you sure you want to remove CA configuration?","ads_admin_product_settings_ha_master_slave_context_error":"Error in enabling high availability. Please make sure both the primary and standby servers have the same context path, and their build number supports high availability.","adssp_login_tfa_alert_saml_invalid_logout_url":"Please use a valid HTTP/HTTPS url","adssp_admin_customize_logon_drag_drop_provide_link":"Please provide proper Link Details","adssp_admin_gina_reinstall_success":"Successfully Reinstalled","ads_configuration_mdm_setup_country_code_alert":"Please make sure Country code is 2 letters.","adssp_config_management_custom_text_provide_frame_text":"Please provide Frame Text","the":"The","adssp_common_text_the":"The","adssp_admin_policy_config_apc_notify_rp_mail_verify_code_body":"Dear %userName%,\\n\\nWe understand that you want to reset your password/unlock account. To prevent eavesdropping and substantiate your identity, please enter this verification code in the password reset/unlock account page: %confirmCode%\\n\\nRegards,\\nAdministrator","adssp_reports_audit_rep_data_time_all_att":"Date and time of all attempts","adssp_admin_policies_policy_config_adv_ID_ver":"Advanced","calendarNoSetUp":"Calendar.setup:  Nothing to setup (no fields found).  Please check your code.","adssp_js_calendar_saturday":"Saturday","adssp_enrollment_alert_configure_duo_sec":"You are required to enroll using Duo.","adssp_common_text_show":"Show","adssp_admin_server_settings_mail_content_empty":"Please enter the Message that you wish to test","adssp_choose_recipient_select_mobile_value_alert":"Please select a mobile number.","adssp_configuration_ppe_choose_file_less_than_10MB":"File size should not exceed 10 MB.","adssp_js_calendar_day_thu":"Thu","adssp_admin_policies_sulayout_enter_your_layout_name":"Enter your layout name","adssp_admin_settings_connection_ssl_tool_validity_positive":"Make sure Validity is a positive integer! And no zero or letters!","adssp_admin_server_settings_vpn_enter_connect_cmd":"Mandatory fields cannot be left empty.","adssp_configuration_task_scheduler_enter_enroll_url":"Please enter the Server Access URL To Enroll","adssp_admin_adsearch_alert_atleaset_one_obj_should_enable":"Enable at least one type of search.","day_tue":"Tue","adssp_domain_user_enrollment_ver_code_duplicate_email_id":"Duplicate email-id found. Kindly provide a unique one.","adssp_domain_user_reset_qa_sel_ques_text_the_ques_should_between_to_chars_long":"'The question(s) should be between ' +var1+ ' - ' + var2 + ' characters long'","adssp_su_custom_field_cant_update_mapped_as_login_attribute":"Unable to update this attribute.This attribute is being used as login Attribute.","ads_admin_product_settings_ha_pip_master_range_error":"The virtual IP address must be in the same network as the primary server.","adssp_admin_config_mfa_enable_microsoft_auth":"Enable Microsoft Authenticator","adssp_admin_config_pwd_sync_automatic_link_alert_adlds":"User accounts will be automatically linked  if the usernames are the same in both AD and AD LDS","adssp_license_expiry_value_notification_days_range":"Please make sure the license expiration notification days are in the range of 0 to 365.","adssp_common_confirm_box_navigate_away_msg":"Are you sure you want to navigate away from this page? Your changes have not been saved.","error_code":"Error Code","admin_schedule_reports_select_reports":"----- Select the Reports -----","ads_configuration_mdm_no_mpm":"You must configure the Mobile App Deployment to install the mobile app. Click OK to configure.","adssp_domain_user_enrollment_dont_leave_code_empty":"Please don't leave the code field empty","adssp_domain_user_my_info_photo_upload_invalid_extension":"Invalid Extension","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_garamond":"Garamond","adssp_common_alert_enter_no_btwn_1_and_365":"Please enter a value between 1 and 365.","adssp_admin_general_server_settgs_not_valid_port":"Please enter a valid port number.","adssp_admin_gina_err_adminshare_not_enabled":"Admin Share Not Enabled","adssp_config_gina_err_logon_failure_target_ac_incorrect":"Logon Failure: The target account name is incorrect.","adssp_reset_unlock_accounts_secret_ques_alert_verify_ans":"Verify your answers","ads_iamapps_account_mapping_account_linking_tooltip2":"Select an attribute from {0}.","ads_iamapps_account_mapping_account_linking_tooltip1":"Select an attribute from Active Directory.","adssp_login_tfa_alert_passcode":"Passcode","adssp_admin_policies_policy_config_alert_min_max_not_match_que":"The minimum & maximum number of characters should not be same for user-defined questions.","adssp_login_admin_page_script_alert_enter_valid_name_pwd":"Please enter valid user name and password to proceed","adssp_config_mfa_create_configuration_radius_text":"RADIUS","adssp_admin_policies_scheduler_soon_to_expire_msg_second_templete":"Dear %userName%,\\n\\nYou have been reminded already about the impending password expiry (on %dateTime%). However, you have not changed it yet. Please change it as soon as possible. Thank you.\\n\\nRegards\\nAdministrator","positiveValues":"Enter Positive Numerical Values only.","admin_policy_confirm_delete_policy":"Are you sure want to delete the Policy ?","adssp_js_calendar_month_apr":"April","adssp_configuration_ppe_fill_all_fields":"Please fill all the custom text fields for all platforms.","adssp_login_tfa_alert_pin_mismatch":"New pin and confirm pin mismatch.","adssp_configuration_sulayout_phone_format_not_empty":"Phone Format should not be empty","adssp_admin_settings_connection_ssl_tool_enter_password":"Please Enter Password","ads_configuration_mdm_pushmanager_settings_goto_step3":"Your signed CSR has been mailed to you successfully. You still want to go back?","ads_configuration_mdm_pushmanager_settings_goto_step1":"Your CER has been uploaded successfully. You still want to go back?","adssp_admin_config_mfa_disable_totp_auth":"Disable Time-based One-time Password Authentication","adssp_admin_settings_connection_ssl_tool_pwd_min_chars_new":"Password length should be minimum 6 Characters and should not contain spaces.","adssp_login_tfa_alert_confiure_mail_server_new":"Configuration of mail server is must. So please configure the 'Server Settings' first. Do you want to proceed without saving other changes?","ads_configuration_mdm_pushmanager_settings_goto_step2":"Your CSR has been generated successfully. You still want to go back?","adssp_configuration_gina_invalid_csv_need_proper_file":"Need Proper file","adssp_config_admin_tools_helpdesk_empty_question":"Security question cannot be empty.","ads_admin_product_settings_ha_master_service_privilege_failure":"Failed to update the user credentials for service in the primary server. Please update it manually and try again.","adssp_common_text_some_fields_left_blank":"Some of the fields have been left blank. Please check.","adssp_admin_general_enable_audio_capt_txt":"<table style='position:relative;font-size:10px'><tr><td><span class=dot><\/span><\/td><td><div>When audio CAPTCHA is enabled, only numbers will be shown in the CAPTCHA image.<\/div><\/td><\/tr><tr><td><span class=dot><\/span><\/td><td><div>When a browser does not support audio CAPTCHA, then the default CAPTCHA image will be shown.<\/div><\/td><\/tr><\/table>","adssp_admin_selfupdate_layout_custom_field_disp_name_already_exist":"Attribute Display name Already Exists.","ads_admin_smartcard_please_enter_certificate_mapping_attribute":"Please select a certificate mapping attribute.","adssp_js_calendar_month_jan":"January","adssp_layout_domain_setting_provide_valid_domain_name":"Provide a valid Domain Display Name","adssp_common_text_pls_wait":"Please wait","adssp_common_text_popuptitle_select_groups_ous":"Select OUs/Groups","adssp_configuration_ppe_restricted_patterns_condn":"Restricted patterns must not start or end with a comma and it must not contain 2 consecutive commas.","adssp_admin_config_pwd_sync_automatic_link_alert_dynamicscrm":"User accounts will be automatically linked  if the usernames are the same in both AD and Microsoft Dynamics CRM.","adssp_configuration_admin_tools_ext_dat_source_select_user_to_update":"Select the user(s) to update","adssp_admin_server_settings_mail_enter_valid_mail_subject":"Enter valid Mail Subject","adssp_admin_selfupdate_layout_single_line_text":"Single Line Text","adssp_admin_config_mfa_save_yubikey_auth":"save","adssp_config_gina_err_could_not_connect_adminshare_enable_troubleshoot":"1.Configure Domain Settings(When Run As Console) / Logon Tab(When Run As Service) with Administrative Credentials<br/><br/>2.Admin share might not be enabled.","adssp_configuration_gina_mac_error_authentication_failed":"Invalid service account credentials.","adssp_config_gs_selected_users":"Users","adssp_admin_policies_policy_config_new_pol_name":"New Policy Name","adssp_configuration_sulayout_initial_value_valid_char":"Initial Value should be a Character","ads_iamapps_config_alert_valid_domain_name":"Enter valid Domain Name","adssp_admin_general_custom_disp_settgs_alert_access_control":"Are you sure to access Admin Page only from <span style='color:FF3434;'>{0}<\/span>","adssp_save_button":"Save","adssp_common_layout_footer_feedback_enter_mail":"Please enter an e-mail id.","adssp_windows_logon_tfa_configure_access":"Please make sure the Access URL is updated with the HTTPS URL.","adssp_common_text_cannot_move":"You cannot move this text.","adssp_su_custom_field_cant_update_mapped_in_ad_question":"Unable to update this attribute.It could be configured for a AD Security Question in multi-factor authentication or approval workflow.","adssp_admin_config_mfa_disable_microsoft_auth":"Disable Microsoft Authenticator","adssp_config_su_custom_attrib_unsupported_datatype":"Unsupported DataType.","adssp_reports_enroll_rep_push_reg_device_confirm_delete":"Are you sure want to Disenroll this user's mobile?","adssp_admin_schedulelist_enable":"Enable","ads_iamapps_config_alert_some_fields_left_blank":"Some of the fields have been left blank. Please check.","adssp_admin_policyConfig_thirdStep_edit_ques_enter_que":"Enter the Question","adssp_license_expiry_valid_domain_count_limit":"Please make sure the value for available license count is in the range of 0 to","admin_policies_gina_stop_action_progress":"Stopping  action is Progressing. It will take time.  Please wait and try after some time.","ads_admin_product_settings_ha_slave_bindaddress_error":"You cannot set up high availability when bind address is configured in standby server.","adssp_config_gina_restrict_bad_cert":"This option will restrict to load the application with invalid SSL Certificate.<br> It is recommended to enable this option when moving to production.","adssp_admin_imp_ans_confirm":"The imported questions from the CSV file, if different from the existing ones, will get added to the security questions list.","adssp_configure_policy_config_apc_auto_enable_reset_notification":"Reset notifications must be enabled for Automatic Reset & Unlock.","adssp_config_mfa_create_configuration_confirm_create":"Apply to this policy","adssp_admin_enrollment_notification_push_notification_text_push_char_limit":"Push message character limit exceeded. Please shorten the message and try again!","adssp_connection_error_refused":"Connection refused","adssp_admin_selfupdate_layout_drop_fields_app_pos":"Kindly drop the field in an appropriate position.","prevYr":"Prev year (hold for menu)","adssp_admin_server_settings_proxy_enter_valid_server":"Please Enter a valid Server Name","adssp_admin_server_settings_mail_enter_valid_mail_port":"Please Enter a valid Mail Port","adssp_commom_text_advance":"Advance","ads_admin_product_settings_ha_disabled":"High Availability setup has been disabled successfully. You must restart the ADSelfService Plus services for the settings to take effect.<br><br><b>Note:<\/b> Restart the services in the following order: <br><br>1. Standby Server <br>2. Primary Server","adssp_admin_restricted_deletedusers_msg_setto_unowned":"For still older report, set the Account Type to <span class=\\\"normalBoldFont\\\">\\\"Unowned Licenses\\\"<\/span>.","adssp_admin_general_custom_disp_settgs_alert_access_control_give_least_one_type":"Give Admin Login Page Access to atleast one address","adssp_cancel_button":"Cancel","emptyMailReceipient":"No Mail Recipients Selected.","adssp_logon_page_page_script_alert_captcha_enter_chars":"Please enter the exact characters as found in the image.","ads_iamapps_account_mapping_account_linking_ad_tooltip2":"Select an attribute from the {0} domain to which passwords will be synced.","adssp_common_text_generate_on":"Generate on","adssp_common_text_type_your_mail_subject":"<Type your mail subject here>","adssp_common_alert_enter_name":"Field name cannot be blank.","ads_iamapps_account_mapping_account_linking_ad_tooltip1":"Select an attribute from the AD domain where password will be changed.","adssp_configuration_gina_pls_select_computer":"Please select computer(s)","adssp_admin_config_pwd_sync_automatic_link_alert_zoho":"User accounts will be automatically linked  if the usernames are the same in both AD and Zoho.","adssp_admin_customize_db_backup_schedule_hide_msg":"<span class=\\\"redtxtbold\\\">PS: <\/span>Hiding this message does not cancel the process","ads_support_roboupdate_download":"<div style=padding-left:10px><span class=adsfontSize12><b>Updates downloaded!<\/b><\/span><br/><span class=adsgrayfont>Click Update - This will restart ADSelfService Plus now to update it.<br/>Click Later - This will update ADSelfService Plus when it is restarted.<\/span><\/div>","adssp_admin_server_settings_vpn_enter_port_no":"Please enter VPN port no","adssp_config_policy_config_advanced_alert_password_constrain_voilation":"Please make sure the restriction doesn\u2019t contradict each other","month_jan":"January","adssp_js_display":"Display","adssp_admin_selfupdate_layout_photo_dimension_format":"Dimension should be in width \\* height format","adssp_popup_common_errormsg_text_no_objs_found_refresh":"No Object(s) found. Please try again.","adssp_common_text_popuptitle_select_computers":"Select Computers","emptyLogonTo":"Logon to Computers is left empty.","adssp_admin_config_mfa_disable_rsa_auth":"Disable RSA SecureID","ads_admin_product_settings_ha_slave_architecture_error":"You cannot set up high availability between a 32-bit system and a 64-bit system.","monday":"Monday","adssp_configuration_sulayout_phone_format_allowed_value":"Allowed Value","tree_page_loading_message_message":"Loading...","adssp_admin_settings_connection_ssl_tool_length_positive":"Make sure Public Key Length is a positive integer! And no zero or letters!","ads_saml_config_alert_fill_idp_logout_url":"You need to update the IDP Logout Url to enable this option.","adssp_admin_logon_customize_dragndrop_htmlarea_fontsize_7_point":"7 (36 pt)","splCharacters":"The special characters / \\ [ ]: ; | = + * ? < > @ \\\\\\\" are not allowed. Please remove them and try again.","ads_admin_product_settings_ha_slave_service_success":"Service successfully installed in the standby server. Restart ADSelfService Plus as a service.","adssp_configuration_sulayout_phone_format_invalid_template":"Please use valid phone format template.Use X,0-9,(),-,+ and white space only.","adssp_admin_config_pwd_sync_automatic_link_alert_oracledb":"User accounts will be automatically linked  if the usernames are the same in both AD and Oracle Database.","adssp_config_gina_show_addsp_link":"This option applies to Windows(Vista and above), macOS and linux.","adssp_admin_adsearch_select_object":"Please select any object(user/group/contact) to search for","ads_support_roboupdate_alert_port_range":"Port range must be between 0 to 65535.","adssp_login_tfa_rsa_not_configured_copy_config_file":"Configuration is not complete. Copy sdconf.rec from RSA SecurID server to &lt;InstallDir&gt;/bin and try again.","adssp_configuration_task_scheduler_enter_net_share_path":"Please provide network share path","month_apr":"April","password_policy":"The password does not meet the password policy requirements. Check the minimum password length, password complexity and password history requirements.","adssp_admin_customize_logon_drag_drop_self_upd":"Self Update","adssp_admin_policies_identity_invalid_mobile_format":"Please use valid mobile format template.Use X,0-9,(),-,+ and white space only.","no_user_name":"Could not connect to the machine. User name is Null","adssp_config_multi_sec_qa_admin_defin_ques":"<b>Number of Administrator-Defined Questions<\/b> cannot be greater than the actual number of questions({0}) you have configured. Please enter a lower number or add more questions.","no_adssp_admin_gina_no_install_action":"Install action is Null","licenserestrict":"Installation Not Started because of License Restriction","adssp_admin_settings_connection_ssl_tool_validity_exceeds_limit":"Please make sure the value you have entered for certificate validity does not exceed 5 years.","adssp_admin_config_mfa_disable_mobile_auth":"Disable Google Authenticator","adssp_admin_gina_err_incorrect_troubleshoot":"Incorrect function","adssp_admin_configuration_tech_alert_confirm_del_enroll_user":"The enrolled information will be deleted for the selected user if they are enrolled.","adssp_admin_server_settings_mail_enter_valid_mobile_number":"Please enter a valid mobile number","adssp_admin_customize_logon_drag_drop_provide_image":"Please provide an image","adssp_admin_policies_scheduler_soon_to_expire_subject_templete":"Password/Account Expiry Notification","admin_policy_alert_config_attributes":"Configure Active Directory attributes for Self Update.","ads_admin_product_settings_ha_both_invalid_credential":"Please enter valid credentials.","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_impact":"impact","adssp_admin_general_custom_disp_settgs_alert_configure_ntlmv2":"Configuring computer account is necessary to enable SSO.","adssp_login_pwd_nomatch":"The passwords do not match.","ads_admin_product_settings_ha_slave_service_failure":"Failed to install ADSelfService Plus as a service in the standby server.","ads_admin_product_settings_ha_master_slave_bindaddress_error":"You cannot set up high availability when bind address is configured in both primary and standby server.","adssp_configuration_gina_install_process_completed":"'Process completed for '+val","adssp_config_mfa_advanced_alert_random_que_lessthan_man_ques":"Number of questions to be displayed at random should not be less than the total number of security questions you,ve marked as mandatory.","adssp_configure_policy_config_apc_auto_generate_pwd_alert":"Passwords will be automatically generated based on the custom password policy you have configured and Have I Been Pwned? when integrated with ADSelfService Plus.","ads_support_roboupdate_alert_prt_number":"Please enter a valid port number","report_user_account_status_disabled":"Disabled","adssp_configuration_cached_credentials_connection_name":"VPN Connection Name","adssp_domain_user_reset_qa_sel_ques_alert_create_ques":"Please create a question","adssp_admin_gina_no_install_action":"Install action is Null","adssp_admin_policyConfig_thirdStep_edit_ques_confirm_del_que":"Are you sure you want to delete this question ?","adssp_config_mfa_create_configuration_confirm_text":"Do you want to apply the changes to all the policies that share this same {0} configuration or only to this policy? ","adssp_admin_license_management_restrict_users_service_accounts":"Service Accounts","adssp_common_alert_duplicate_choices":"Each choice must be unique. Please remove the duplicates.","ads_common_text_click_to_install":"Click Here to Install.","adssp_js_calendar_goToday":"Go Today","adssp_domain_user_enrollment_ver_code_click_plus_to_add":"Click Plus Icon to Add More","adssp_configure_policy_config_apc_unlock_limit_alert":"This option covers only unlock account actions carried out by users through ADSelfService Plus.","adssp_config_gs_alert_change_domain":"Your current settings will be lost. Are you sure you want to change domain?","adss_admin_gina_err_could_not_install_client_software":"Could not Install Client Software","adssp_reports_pwd_expired_notification_mail_subject":"Password Expired Notification","adssp_common_alert_config_mail_server":"Configuration of mail server is must. So please configure the 'Server Settings' first.","adssp_admin_policyConfig_thirdStep_sel_ous_groups":"Please select at least one OU or Group and try again.","adssp_admin_selfupdate_layout_untitled":"Untitled","adssp_admin_gina_no_install_action_troubleshoot":"Install action is Null","adssp_common_text_atleast_one_policy":"At least one policy should be selected","adssp_admin_customize_logon_drag_drop_reset_pwd_desc":"Reset your forgotten password","adssp_login_admin_page_script_alert_enter_valid_name":"Please enter valid user name to proceed","adssp_admin_logon_customize_dragndrop_htmlarea_ordered_list":"Ordered List","adssp_admin_logon_customize_dragndrop_htmlarea_fontsize_2_point":"2 (10 pt)","adssp_admin_customize_db_backup_schedule_pls_db_backup_processing":"Database backup is in progress...","adssp_admin_policies_identity_verify_hide_sec_mail_mobile_alert":"Disabling this option will restrict users from enrolling using their secondary email and mobile data.","adssp_config_adsqa_login_as_admin_to_configure":"Please login as a Super Admin using ADSelfService Plus authentication to edit this setting.","adssp_login_validate_fullname":"entered has one or more illegal characters + \\ \\\\\\\". These are not allowed. Please remove them and try again.","adssp_admin_general_custom_disp_settgs_alert_access_control_admin_login_invalid_ip_server":"Invalid IP Address / Sever Name","adssp_admin_logon_customize_dragndrop_htmlarea_fontsize_4_point":"4 (14 pt)","adssp_login_validate_username":"entered has one or more illegal characters / \\ [ ]: ; | = , + * ? < > @ \\\\\\\". These are not allowed. Please remove them and try again.","adssp_popup_viewOU_no_ou_message":"No OUs Found.","ads_admin_product_settings_ha_settings_not_disabled":"Settings not disabled.","adssp_support_alert_validemail":"Please enter valid Email ID","ads_configuration_mdm_users_no_user_selected":"Please select a user and proceed.","adssp_admin_general_show_logon_option_help":"Prepend &quot;.&#92;&quot; with your username if you are not a Domain User.","today":"Today","adssp_admin_configuration_tech_alert_mandatary_cannot_change_password":"You cannot reset password for the default admin account","friday":"Friday","admin_policy_alert_cannot_applied":"This domain is already mapped to a policy. Once a domain is mapped to a policy, you cannot bind it with another policy.","adssp_admin_restricted_referesh_dc":"All the DCs of the domain should have been configured in \\\"Domain Settings\\\" for a valid inactive users report.","ads_admin_product_settings_ha_settings_disabled":"Settings disabled successfully.","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_timesnewroman":"Times New Roman","goToday":"Go Today","adssp_login_tfa_alert_code":"Code","adssp_common_alert_duplicate_empty_choices":"Each choice must be unique.Should not contain duplicate empty values too.","adssp_admin_customize_db_backup_schedule_close_text":"Close","adssp_login_tfa_alert_message_misses_confirm_code":"Message should contain %confirmCode% macro.","adssp_configuration_admin_tool_quick_enroll_notify_specified_users":"Are you sure you want to send this message to the users specified?","BlankImportCSV":"Import CSV field cannot be blank. Browse to select CSV file.","ads_support_roboupdate_latest_version":"<span class=adsfontSize12>ADSelfService Plus is up to date.<\/span>","adssp_configuration_gina_mac_error_unsupported_architecture":"Operation failed due to unsupported machine architecture.","adssp_selfservice_gs_search_groups":"Search Groups","adssp_enrollment_alert_configure_Duo_tab_disable_alert":"Complete Duo Enrollment before switching Tabs.","adssp_admin_config_mail_attachment_delete_att":"Are you sure you want to remove the attachment?","ads_admin_product_settings_ha_settings_configured":"Settings saved successfully.","adssp_configuration_admin_tool_quick_enroll_notify_domain_users":"Are you sure you want to send this message to the users in selected domain?","ads_iamapps_config_alert_sp_logo_uploading_empty_file":"Icon field cannot be left empty.","adssp_js_calendar_nextYr":"Next year (hold for menu)","adssp_config_admin_tools_helpdesk_enable_save":"Enable Self-Service Approval, and then click Save","adssp_admin_policies_scheduler_soon_to_expire_notify_users_days_in_advance":"Notify the user when it is {0} days to password/account expiry.","ads_admin_logon_settings_smartcard_settings_disable_success":"Smart card has been successfully disabled.","adssp_common_text_yes":"Yes","adssp_admin_adsearch_alert_atleaset_one_attribute_should_sel":"At least one attribute should be in selected items.","adssp_connection_error_timed_out":"Connection timed out","adssp_admin_customize_db_backup_schedule_backup_success":"Database successfully backed up.","adssp_admin_general_adsearch_group_details":"Group Details","adssp_popup_common_errormsg_text_no_objs_found":"No Object(s) found.","adssp_admin_server_settings_mail_enter_valid_mail_server":"Please Enter a valid Mail Server Name","adssp_admin_adsearch_select_display_columns":"Please select a field for the \\'Display Columns\\'.","adssp_admin_restricted_serviceaccounts_msg":"Generates the \\'Service Accounts\\' of selected computers.","ads_common_button_ok":"OK","password":"The specified network password is not correct","ads_iamapps_config_alert_error_generating_certificate":"Error while generating RSA-SHA Certificates.","adssp_admin_restrict_users_alert_searchkey":"Please enter text to search","adssp_admin_policies_identity_atleast_one_verify_sel":"Please select at least one mode (email/mobile) where verification code could be sent.","adssp_config_management_custom_text_provide_server_name":"Please provide Server Name","adssp_config_gina_err_logon_failure_target_ac_incorrect_troubleshoot":"1.This error message can occur if two computers have the same computer name. One computer is located in the child domain; the other computer is located in the parent domain.","adssp_domain_user_my_info_letters_alert":"'Enter only letters in the \\\"'+labelName+'\\\" field.'","ads_admin_product_settings_ha_master_child_notification_failed":"Some of the integrated components are down. Please update the integration settings of those components manually.","adssp_domain_user_my_info_phone_num_alert":"'Enter the numbers  in \\\"'+labelName+'\\\" field in the following format '+format","adssp_admin_policyConfig_thirdStep_edit_ques_deletion":"Deletion Cannot be performed. Security Question in use by a User.","adssp_config_admin_tools_pwd_sync_no_policy_assigned":"No Policies are assigned","adssp_admin_restricted_serviceaccounts_message":"Service Accounts are user accounts that has \\'log on as a service\\' right.","adssp_common_tree_page_loading_message":"Loading...","adssp_admin_config_pwd_sync_automatic_link_alert_zendesk":"User accounts will be automatically linked  if the usernames are the same in both AD and  Zendesk.","adssp_common_text_admin_email_duplicated":"Please make sure there are no duplicates in the email address field.","localDirFormat":"The Specified path is not valid. Enter a valid path using the form :drive-letter:\\directory.","adssp_admin_schedulelist_weekly_schedule":"on every week","ads_admin_product_settings_ha_slave_master_same":"The primary server and the standby server cannot be the same.","specifyFirstName":"Please specify a first name.","adssp_enrollment_alert_configure_ga":"You are required to configure Google Authenticator.","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_verdana":"Verdana","adssp_reports_enroll_rep_disenroll_invalid_file_format":"Invalid file format. Please select a CSV file.","adssp_admin_policies_enroll_settings_conf_mail_server":"Please Configure Mail Server","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_wingDings":"wingDings","adssp_configuration_gina_pls_select_csv_file":"Select the CSV file field cannot be blank. Browse to select CSV file","adssp_reports_audit_rep_success":"Success","adssp_common_text_hide":"Hide","adssp_common_alert_mob_format_empty":"Please don't leave the mobile format empty","ads_admin_product_settings_ha_master_not_running_as_service":"{0} in the primary server is not running as a service. Please install it as a service and then continue.","ads_admin_product_settings_ha_master_service_success":"Service successfully installed in the primary server. Restart ADSelfService Plus as a service.","adssp_admin_server_settings_mail_enter_valid_smpp_server":"Please enter Valid SMPP Server Name.","adssp_admin_server_settings_sms_enter_valid_url":"Enter valid HTTP URL","ads_support_roboupdate_alert_conf_mail_server":"Please Configure Mail Server","adssp_domain_user_enrollment_ver_code_dont_leave_emp_mob":"Don\\'t leave the field empty. Please mention the phone number to which you want to receive the verification code.","ads_iamapps_config_alert_no_policy_selected":"Select atleast one policy.","adssp_config_admin_tools_pwd_sync_no_hosts_selected":"Please select the hosts before performing the operations","ads_admin_product_settings_ha_slave_down":"{0} in the standby server is down. Please make sure it is up and running.","adssp_admin_gina_uninstall_success":"Successfully Uninstalled","adssp_admin_logon_customize_dragndrop_htmlarea_underline":"Underline","adssp_admin_server_settings_modem_enter_valid_pin_number":"Please Enter a valid PIN Number","another_ver":"Another version of this product is already installed.","adssp_admin_gina_network_path_not_found_troubleshoot":"1.Ensure if such a computer really exists.<br/><br/>2.If so, ensure it is well connected to the network.<br/><br/>3.To check for connectivity, ping this computer only from the server where ADSelfService Plus has been installed","adssp_config_mfa_edit_ques_complete_before_save":"Please finish editing question before save","adssp_admin_gina_err_couldnotconnect_troubleshoot":"1.Ensure if such a computer really exists.<br/><br/>2.If so, ensure it is well connected to the network.<br/><br/>3.To check for connectivity, ping this computer only from the server where ADSelfService Plus has been installed","adssp_admin_policies_policy_config_sec_que_you_will_not_need":"You will not need \\'Security Questions\\' if you do not enable \\'Reset Password\\' or \\'Unlock Account\\'.","adssp_admin_importanswers_policy_permission":"Selected policy is not eligible for enrollment.","access_deny":"Access is denied.","adssp_admin_config_pwd_sync_automatic_link_alert_salesforce":"User accounts will be automatically linked  if the usernames are the same in both AD and  Salesforce.","adssp_admin_customize_logon_drag_drop_change_pwd":"Change Password","adssp_admin_server_settings_vpn_enter_disconnect_cmd":"Mandatory fields cannot be left empty.","ads_admin_product_settings_ha_pip_same_as_master":"Virtual IP address is already mapped with the primary server. Please try a different IP address.","adssp_admin_policyConfig_advancedpolicyconfig_alert_message_numberic_val":"Please enter numerical value(s)","adssp_admin_restricted_deletedusers_msg":"Generates the \\'Deleted Users List\\' of AD (in the last 90 days)","specifyLogonName":"Please specify a logon name.","ads_iamapps_config_alert_success_configuration":"Settings saved successfully.","adssp_admin_gina_couldnot_start_remote_service":"Couldn't Start Remote Service","ads_admin_product_settings_ha_pip_slave_range_error":"The virtual IP address must be in the same network as the standby server.","adssp_admin_policies_policy_config_apc_reset_unlock_note_content":"Mail/SMS Server settings must be configured.","ads_iamapps_config_alert_invalid_format":"Invalid file format","adssp_admin_selfupdate_layout_unable_del_lay_assigned_policy":"Unable to delete. This layout is assigned to a policy/policies.","adssp_config_mfa_adsqa_quest_mapped_wf_confirm_change_attr_mapping":"This question is used in workflow. Are you sure you want to change the attribute mapping?","adssp_reports_acc_expired_notification_mail_subject":"Account Expired Notification","ads_admin_product_settings_ha_service_failure":"Failed to install ADSelfService Plus as a service in both the primary and standby servers.","ads_admin_product_settings_ha_service_success":"Service installed successfully. Restart ADSelfService Plus as a service in both the primary and standby servers.","adssp_config_multi_sec_qa_admin_defin_ques_mandatory":"Pre Defined Questions count is lesser than mandatory questions","adssp_reports_audit_licensedusers_alert_select_user":"Select user(s) to delete from Licensed Count","adssp_configuration_gina_mac_error_no_domain_auth_found":"No authentication details found for the domain","adssp_admin_customize_logon_drag_drop_change_pwd_desc":"Change your password using current password","adssp_domain_user_change_pwd_alert_new_pwd":"Please enter the New Password.","adssp_common_text_atleast_one_domain":"At least one domain should be selected","adssp_admin_policies_scheduler_soon_to_expire_scheduler_name_exist":"The scheduler name you have chosen is already in use. Choose another scheduler name.","adssp_admin_importanswers_invalid_filefromat":"Invalid file format. Provide only CSV files.","adssp_configuration_gina_mac_error_unsupported_os_troubleshoot":"1. Machine's OS is not supported for remote installation.<br><br>2. Linux OS remote installation only supports Ubuntu, Fedora and CentOS.","adssp_configuration_enrollment_under_process":"Enrollment is under process","adssp_admin_selfupdate_layout_custom_add_new_field":"Add new field","adssp_admin_customize_logon_drag_drop_unlock_acc_desc":"Unlock your locked out account","ads_iamapps_title_select_provider":"Select a Provider","adssp_config_gina_mac_err_permission_denied":"Permission denied","adssp_su_custom_field_mapped_in_reports":"Unable to delete. This attribute is used in reports.","adssp_config_su_no_conditionfields":"No fields available in layout to set as condition.","adssp_admin_policies_identity_more_dup_mobile_attrib":"Please remove duplicate mobile attributes","adssp_config_su_field_duplicate":"Field name already exists.","adssp_config_mfa_create_configuration_saml_text":"SAML","ads_layout_admin_logon_settings_saml_tab_need_new_config":"Please make sure that you create a new SAML SSO configuration in your IdP for ADSelfService Plus using the updated ACS URL or the SP Metadata file.","adssp_config_mfa_advanced_alert_random_que_lessthan_total_ADque":"Number of questions to be displayed at random should not be greater than the total number of AD security questions you've enabled.","adssp_configuration_cached_credentials_invalid_site_name":"Please enter valid Site Name","adssp_admin_general_disclaimer_customize_agree_checkbox_content":"I, Agree","adssp_common_text_selecting_report":"Please select the report(s).","ads_admin_product_settings_ha_slave_service_not_installed":"{0} Service is not Installed in Standby Server.","adssp_login_tfa_alert_invalid_radius_port":"Invalid RADIUS port number.","adssp_user_org_chart_error_try_after_some_time":"Some error has occurred. Try after some time","adssp_policy_config_apc_notify_ticket_password_content_alert":"Request content should not contain %password% macro","adssp_popup_viewOU_no_ou_tree_page_loading_message_message":"No OUs Found.","ads_admin_product_settings_ha_slave_service_privilege_failure":"Failed to update the user credentials for service in the standby server. Please update it manually and try again.","adssp_admin_settings_connection_ssl_tool_length_512":"RSA key length must be between 512 bits and 32768 bits and it must be a multiple of 64.","adssp_common_text_enter_field_empty":"Don\\'t leave the field empty.","adssp_config_policy_config_advanced_alert_json_format":"Request message is not in json format","adssp_configuration_admin_tools_ext_dat_source_invalid_port":"The port you have specified is not a number","adssp_js_calendar_today":"Today","adssp_insta_notification_select_atleast_one_type":"Select At Least One Product Notification","ads_iamapps_config_alert_configure_here":"Configure here","ads_admin_product_settings_ha_install_service":"NT Service Installation","validateFullName":"entered has one or more illegal characters + \\ \\\\\\\". These are not allowed. Please remove them and try again.","adssp_reports_to_mgr_only_for_acc_expiry":"Only the Soon-to-Expire Account Users and Account Expired Users reports can be emailed to the user's managers.","adssp_admin_customize_db_backup_schedule_err_while_db_backup":"Error occurred while DB backup","adssp_config_policy_config_advanced_alert_min_length_greater":"Minimum length is greater than maximum length","ads_admin_product_settings_ha_slave_db_connection_error":"Unable to connect to the database from standby server.","adssp_admin_gina_err_could_not_install_client_software":"Could not Install Client Software","adssp_admin_gina_err_in_progress":"Another installation is already in progress.","adssp_configuration_gina_mac_alert_restart_linux":"The selected Linux machine(s) will automatically reboot once the login agent is successfully installed. Are you sure you want to continue ?","adssp_configuration_sulayout_phone_format_allowed_value_comma":"Use comma to separate multiple allowed values","adssp_common_text_no":"No","adssp_configuration_ppe_remove_dict":"Remove Dictionary","adssp_domain_user_reset_qa_sel_ques_alert_ans_mismatch_verify":"Mismatch in answer(s). Please verify.","adssp_admin_logon_customize_dragndrop_htmlarea_bullet_list":"Bulleted List","ads_iamapps_config_alert_file_invalid":"Please upload valid file","adssp_config_step_run_now":"Run now","adssp_js_calendar_wednesday":"Wednesday","adssp_config_admin_tools_helpdesk_select_attribute":"Select Attribute","adssp_configuration_add_new_technician":"Add New Technician","adssp_configuration_ppe_max_pal":"Please enter a value greater than 1 for maximum password length or disable palindrome rule.","ads_admin_smartcard_browse_certificate_file":"Browse Certificate File","adssp_admin_configuration_tech_alert_cannot_reset_logon_domain_usr":"You cannot reset your password while you are logged in.","adssp_admin_settings_connection_keystore_encryption_enable_ssl":"Please make sure you've enabled SSL before enabling this option.","adssp_js_calendar_friday":"Friday","pwdNomatch":"The passwords do not match.","adssp_ajaxerror_retrieve_xmldata":"There was a problem retrieving the XML data:","adssp_common_alert_enter_positive_no":"Please enter a positive number.","adssp_license_expiry_specify_days":"Please specify the days to send the license expiration notification.","adssp_config_policy_config_advanced_alert_enter_positive_integer":"Please enter a positive integer.","adssp_admin_server_settings_vpn_pre_shared_key":"Please enter preshared key","day_thu":"Thu","adssp_config_policy_config_advanced_alert_script_content_password":"Account lockout script command does not support %password% macro.","adssp_common_alert_search_pls_enter_text":"Please enter text to search","adssp_js_calendar_day_tue":"Tue","adssp_configuration_cached_credentials_client_location_msg_sonic_wall":"Example: C:\\\\Program Files (x86)\\\\Sonicwall\\\\SSL-VPN\\\\NetExtender\\\\necli.exe","adssp_domain_user_my_info_allowed_phone_num_format_alert":"'Enter the numbers in \\\"'+labelName+'\\\" field in any of the admin defined format'","adssp_configuration_quick_enrollment_need_csv_file":"Please choose a CSV file","adssp_admin_policies_policy_config_apc_reset_unlock_configure":"Configure","ads_admin_product_settings_ha_master_inbuilt_db_mismatch_error":"High availability is not supported if you are using the MySQL server that came bundled with ADSelfService Plus.","adssp_search_term_limit_characters":"Enter less number of characters in search term.","ads_admin_product_settings_ha_server_restart_now":"Restart Now","adssp_domain_user_reset_qa_sel_ques_alert_double_byte":"Please use only letters(a-z), numbers,and symbols for answers.","adssp_su_custom_field_in_layout":"Unable to delete. This attribute is used in a self-update layout.","ads_admin_product_settings_ha_enabled":"High Availability setup has been configured successfully. You must restart the ADSelfService Plus services for the settings to take effect.","adssp_admin_gina_no_product":"Product is uninstalled","sunday":"Sunday","adssp_admin_selfupdate_layout_custom_field_in_use":"It is in use! You cannot delete it.","valueRange2":"The Value Should be between 0 - 24855.","valueRange1":"The Value Should be between 0 - 2097151.","adssp_config_policy_config_advanced_alert_enter_vclength_maxsize":"The maximum length for a verification code is 10.","adssp_admin_policyConfig_edit_ques_enter_valid_que":"Enter a valid Question","adssp_admin_gina_another_ver_troubleshoot":"1.Another version of this product is already installed.<br>2.Uninstall GINA/CP from this machine.","adssp_admin_policies_identity_text_contain_macro":"Please modify the e-mail verification message content to include the {0} macro to use the selected option.","ads_admin_product_settings_ha_master_slave_domain_error":"High Availability can be enabled only if both the primary and the standby servers are in the same domain.","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_georgia":"Georgia","adssp_admin_gina_couldnot_parse_server_install_path_troubleshoot":"Could not parse server install path","adssp_admin_self_update_layout_name_exists":"The layout name you have entered already exists.","ads_admin_product_settings_ha_master_service_failure":"Failed to install ADSelfService Plus as a service in the primary server.","ads_support_roboupdate_upgrade_now":"<span class=adsfontSize12><b>Updating...<\/b><\/span><br/><span class=adsgrayfont>Please close this window and check the machine where ADSelfService Plus is installed for update progress.<\/span>","adssp_domain_user_change_pwd_alert_confirm_pwd":"Please re-enter the Password.","adssp_admin_gina_err_could_not_install_client_software_troubleshoot":"1.Network time out while install the client software.<br/><br/>2.Try again to install/reinstall for this computer","adssp_js_calendar_monday":"Monday","set_attribute":"Error In Setting Attributes","adssp_admin_settings_connection_ssl_tool_country_code_alert":"Make sure Country Code is 2 letters! Not more/less & not numerals!","adssp_admin_policies_policy_config_apc_pwd_pol_palindrome":"'- should not be a palindrome'","adssp_admin_customize_db_backup_schedule_hide_text":"Hide","display":"Display","ads_iamapps_config_alert_confirm_delete_multiple":"Do you want to delete the system configuration(s)?","adssp_common_alert_select_user":"Please select a user/OU.","ads_installation_mdm_pushmanager_settings_app_installation_error":"There was an error in sending the installtion command to th MDM Server.<br>Please try again later.","adssp_config_step_notify_pwd_expired_users":"Notify Password expired users.","adssp_common_text_alloulist":"All OU","adssp_admin_server_settings_modem_enter_valid_port_speed":"Please Enter a valid Port Speed","adssp_admin_server_settings_push_register_enter_valid_domain_name":"Please enter a domain name","adssp_admin_configuration_tech_alert_enter_valid_password":"Please enter password","adssp_configuration_sulayout_initial_value_valid_email":"Initial Value should be a valid email-Id","adssp_configuration_ppe_enter_pass_phrase_len_greater_than_min_len":"Please make sure that the password length required to override all complexity rules is greater than the minimum password length.","ads_support_roboupdate_loading":"Loading...","adssp_config_mfa_create_configuration_yubikey_text":"Yubikey","adssp_config_management_custom_text_dont_give_spaces_server_name":"Do not give spaces in Server Name.","adssp_mobile_settings_button_text_alert_message":"The text length must be between 1 and 50 characters.","adssp_configuration_cached_credentials_invalid_file_loc":"Invalid File Path.","adssp_reports_sqa_rep_search":"Search by name or questions","adssp_config_mfa_create_configuration_saml_confirm_text":"Do you wish to map this configuration in Logon SSO Settings?","adssp_admin_config_mfa_disable_push_auth":"Disable Push Notification Authentication","adssp_admin_general_custom_disp_settgs_alert_access_control_with_range":"Are you sure to access Admin Page only for {0} <br><b>Unique Address<\/b><br><div style='color:FF3434;overflow:auto;max-height:110px;height:110px;'>{0} <\/div>{0} <br><b>Address Range<\/b><br><div style='color:FF3434;overflow:auto;max-height:110px;height:110px;'>{0} <\/div>","adssp_common_layout_footer_feedback_enter_valid_mail":"Please enter a valid e-mail id.","adssp_alert_license_apply_professional_edition":"This feature is exclusive to ADSelfService Plus Professional Edition. Please purchase \\\"Professional Edition\\\" if you wish to use this feature.","adssp_admin_adsearch_select_field":"Please select a field for the \\'Selected Columns\\'.","report_user_account_status_enabled":"Enabled","adssp_common_text_select_notify_method":"Atleast a notification method should be selected","admin_schedule_reports_page_once_in_hr":"Once in every","adssp_common_text_edit":"Edit","adssp_login_tfa_alert_pin":"Pin","ads_admin_logon_settings_smartcard_settings_enable_success":"Smart card has been successfully enabled.","adssp_admin_policies_identity_atleast_one_identity_sel":"Select at least one user identity verification method!","adssp_admin_configuration_tech_alert_change_pwd":"Reset Password","adssp_admin_gina_network_path_invalid_cred":"Network path not found/Invalid Credential.","adssp_domain_user_my_info_allowed_phone_num_alert":"'Enter the numbers in \\\" '+labelName+'\\\" field in the admin defined format'","adssp_reports_enroll_rep_disenroll_mobile_number":"Mobile Number","LeastOneDC":"Atleast one Domain Controller should be added","adssp_common_layout_footer_feedback_estimated_time_enter_purchase_time":"Please select the estimated time of purchase","ads_iamapps_custom_saml_choose_category":"Please choose Application Category","adssp_config_gs_selected_ous":"All Users Of OUs","adssp_su_custom_field_mapped_in_policy_filter":"Unable to delete. This attribute is used in Policy User Filter Criteria.","adssp_admin_gina_another_ver":"Another version of this product is already installed.","adssp_login_admin_page_script_alert_enter_valid_pwd":"Please enter valid password to proceed","adssp_domain_user_my_info_photo_upload_invalid_format":"Invalid file format","adssp_config_gina_err_could_not_connect_adminshare_enable":"Couldn't connect to the machine, ADMIN$.Access is denied","ads_iamapps_config_alert_no_hosts_provider":"No system configured for {PROVIDER}","adssp_config_quick_enroll_sceduler_name_empty":"Scheduler name is empty","adssp_admin_policies_scheduler_soon_to_expire_config_mail_server":"Configuration of mail server is must. So please configure the 'Server Settings' first.","ads_admin_logon_settings_smartcard_settings_delete_confirm":"Are you sure you want to delete this Smart Card configuration?","adssp_admin_customize_logon_drag_drop_self_upd_desc":"Update your contact information","adssp_admin_server_settings_mail_enter_valid_smpp_port":"Please enter Valid SMPP Server Port.","adssp_admin_policyConfig_thirdStep_edit_ques_cannot_del_futher":"'Minimum number of Administrator-Defined Questions is '+var1+'. Cannot delete any further.'","adssp_admin_policies_policy_config_alert_min_que_less_max_que":"Minimum question length should be less than maximum question length.","adssp_admin_customize_logon_drag_drop_save_confirm":"This will change the Domain User Logon Screen Permanently. Do you wish to continue ?","adssp_admin_customize_logon_drag_drop_valid_image_file":"Please enter a valid image file.","ads_admin_product_settings_ha_slave_cluster_exists":"High availability setup already exists in the standby server.","ads_admin_product_settings_ha_slave_invalid_credential":"Please enter valid credentials for the standby server.","ads_common_text_update":"Update","ads_admin_product_settings_ha_not_running_as_service":"You must run {0} as a service in both the primary and standby servers.","adssp_configuration_gina_mac_error_authorization_failed":"Insufficient privileges to the service account.","adssp_configuration_cached_credentials_invalid_connection_name":"Please enter valid Connection Name","adssp_configuration_ppe_dict_file_name_not_contain_comma":"Dictionary file name should not contain comma.","adssp_tab_license_alert_click_upgrade_message_txt":"Please click 'Apply License' button after specifying a proper license file.","adssp_admin_server_settings_empty_attr_value":"You are not allowed to add an empty attribute.","adssp_admin_selfupdate_layout_positive_photo_dimension":"Dimension should be positive","ads_admin_product_settings_ha_virtual_slave_same":"The virtual host name cannot be the same as the standby server.","ads_iamapps_custom_saml_alert_update_custom_app_config":"Editing the settings for this application will disable the SSO settings you've configured for its domains. Do you want to continue?","adssp_configuration_admin_tools_ext_dat_source_name_already_exist":"The name you have choosen is already in use. Choose another name","adssp_admin_policies_gina_install_text_stopprocess":"Stop Action in progress and will take effect after the present batch is completed.(The installation process is done in consecutive batches of computers).","adssp_admin_policies_scheduler_soon_to_expire_config_sms_server":"Configuration of SMS server is must. So please configure the 'Server Settings' first.","adssp_config_gina_option_windows_mac":"This option applies to Windows and macOS.","adssp_common_alert_empty_no_of_days":"No. of days cannot be empty.","adssp_admin_policies_policy_config_alert_min_ans_less_max_ans":"Minimum answer length should be less than maximum answer length.","adssp_config_gina_mac_err_couldnt_copy_linux_tar":"Could not copy ADSSPLinuxClient.tar.gz","computerNameValidation":"The Computer names entered has one or more illegal characters / \\ [ ] : | = + * ? < > \\\\\\\". These are not allowed. Please remove them and try again.","ads_iamapps_config_alert_invalid":"Invalid","admin_policy_alert_already_mapped":"This OU is already mapped to a policy. Once an OU is mapped to a policy, you cannot bind it with another policy.","adssp_config_gina_mac_err_couldnt_copy_pkg":"Could not copy ADSelfServicePlusMacLoginAgent.pkg","adssp_configuration_ppe_default_dictionary_cannot_delete":"Default dictionary cannot be deleted.","adssp_ember_server_enter_new_attr":"Enter new Attribute","adssp_config_invalid_yubikey_client_id":"Invalid Yubico client ID","adssp_common_text_no_changes_found":"No modifications found that could be saved.","adssp_admin_gina_network_path_invalid_cred_troubleshoot":"1.Configure Domain Settings(When Run As Console) / Logon Tab(When Run As Service) with Administrative Credentials<br/><br/>2.Admin share might not be enabled.","adssp_admin_server_settings_mail_server_not_configured":"Mail Sever not configured.","ads_iamapps_config_alert_success_generating_certificate":"Successfully generated RSA-SHA Certificates.","adssp_configuration_ppe_choose_dict_file":"Dictionary rule is selected but no dictionary file is chosen.","adssp_js_calendar_day_fri":"Fri","ads_admin_product_settings_ha_settings_already_disabled":"High availability is already in disabled state.","adssp_common_text_selected_no_options":"You haven\\'t selected any options.","adssp_config_emp_search_showonly_forest_tooltip":"If this option is enabled, it is recommended to disable \\\"Show Employee Search & Organization Chart on Login Page also\\\" setting. Otherwise, the user will be able to view users from other forests in the search results.","removeMailSplChar":"The E-mail entered has special characters. These are not allowed. Please remove them and try again.","adssp_config_mfa_create_configuration_duo_text":"Duo","adssp_admin_dc_config_save_couldnt":"Could not save the configuration. Please try later.","adssp_config_gs_alert_group_already_selected":"The group <b>{0}<\/b>, is already selected in the subscription named, <b>{1}<\/b>.","adssp_enrollment_alert_configure_vc":"You are required to configure Verification Code.","nextYr":"Next year (hold for menu)","ads_admin_product_settings_ha_exception":"Unable to save the changes. Please try again later or contact ADSelfServicePlus support.","adssp_configuration_cached_credentials_client_location_msg_open_vpn":"Example: C:\\\\Program Files (x86)\\\\Sophos\\\\Sophos ssl client\\\\bin\\\\openvpn.exe","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_arial":"Arial","adssp_admin_general_hide_admin_div_block_disable_sso":"You must disable logon SSO settings before you can disable Hide Self-Service Admin Logon.","adssp_reports_enroll_rep_disenroll_sam_account_name":"SAM Account Name","adssp_admin_policies_policy_config_apc_reset_unlock_enforce_pwd_his_ch_pwd_flag":"To this feature works : User Cannot Change Password flag should be disabled.","adssp_domain_user_my_info_mandatory_alert":"You cannot leave the mandatory fields empty.","ads_installation_mdm_pushmanager_settings_app_status_update_error":"There was an error in sending the app status update command to  the MDM Server.<br>Please try again later.","ads_common_button_cancel":"Cancel","adssp_login_splchar_notallow":"The special characters / \\ [ ]: ; | = + * ? < > @ \\\\\\\" are not allowed. Please remove them and try again.","adssp_admin_config_mail_attachment_size_limit":"Attachments' size exceeds 25MB. Please select files within the size limit.","ads_admin_product_settings_ha_invalid_credential":"Please enter valid credentials.<br><b>Note:<\/b> Super Admin credentials should be same in both the primary and standby servers.","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_tahoma":"Tahoma","adssp_admin_config_mfa_modify_yubikey_auth":"modify","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_serif":"Serif","ads_configuration_mdm_no_details":"Please enter valid details before proceeding","adssp_admin_general_add_custom_attributes":"Add new login attributes by configuring custom attributes in ADSelfService Plus.","adssp_admin_policies_policy_config_apc_pwd_pol_use_num":"'- should include numerals'","adssp_admin_customize_logon_drag_drop_image_duplicate":"Image with the same name exists. Kindly provide a different name","ads_admin_product_settings_ha_settings_not_configured":"Settings not saved.","ads_iamapps_config_alert_invalid_subdomain_name":"Invalid Subdomain Name","adssp_configuration_ppe_min_no_of_condn_positive":"Minimum number of complexity requirements must be a positive number less than or equal to the number of complexity rules selected.<br><br><b>Note :<\/b> Dictionary, Patterns, Override, Password History rules will not be included in minimum number of conditions to be satisfied.","adssp_config_gs_select_groups":"Click plus icon to select mail groups.","ads_layout_admin_logon_settings_saml_tab_photo_upload_dimensions_exceeded":"Please make sure the dimension of the IdP logo image does not exceed 50x17.","adssp_admin_restricted_deletedusers_days":"Deleted Users for last {0} days.","adssp_config_gina_err_logon_failure_unknow_user_bad_pwd":"Logon failure: unknown user name or bad password","adssp_configuration_ppe_dict_name_exists":"Uploaded dictionary name is same as the existing custom dictionary.","adssp_configuration_enrollment_action_completed":"Enrollment action completed","adssp_admin_customize_rebranding_provided_title_img_size_exceeds":"Image size exceeds the allowed limit: 200KB. Please upload a smaller image.","adssp_config_admin_tools_pwd_sync_already_enabled":"The selected hosts are already enabled","adssp_admin_customize_logon_valid_text":"Please Enter a valid text","adssp_admin_policyConfig_thirdStep_edit_ques_reset_mandatory":"reset mandatory","adssp_login_user_page_domain_user_text_loading":"Loading... Please wait","adssp_common_layout_footer_feedback_enter_name":"Please enter a name.","adssp_admin_enrollment_notification_push_notification_text_blank_text_fields":"Please do not leave the text field(s) blank","wednesday":"Wednesday","adssp_admin_customize_rebranding_provide_title_img_in_ico":"Please provide \\'Browser Title Image\\' in .ico format","networkDirFormat":"The Specified path is not valid. Enter a valid network server path using the form : \\\\server\\share\\folder.","adssp_admin_configuration_tech_alert_cannot_reset_domain_usr_pwd":"You cannot reset a domain user\u2019s password","adssp_domain_user_reset_qa_dont_use_words":"Don\\'t use any word of a question in your answers.","adssp_config_gina_cp_install_stopped":"Process aborted by the user.","adssp_admin_config_mfa_enable_fp_auth":"Enable Fingerprint Authentication","adssp_login_admin_page_script_alert_browser_info":"You are using a browser which is not supported by ADSelfService Plus. ADSelfService Plus is best viewed in Internet Explorer 5.5+, Netscape 7.0+, Mozilla 1.5+.","ads_admin_product_settings_ha_slave_wrong_product":"High Availability cannot be enabled between two different products.","thursday":"Thursday","adssp_common_text_selecting_policy_man":"Select a Policy.","month_oct":"October","adssp_common_text_success_update":"Successfully updated","adssp_admin_policyConfig_thirdStep_sel_ous":"No OUs Selected. Select the OU(s) and save the policy.","adssp_config_management_gina_custom_restrict_bad_cert_tip":"When enabled, users will not be able to access the password self-service wizard from the login screen if the SSL certificate applied in the product becomes invalid.","adssp_admin_gina_no_product_troubleshoot":"Product is uninstalled","ads_admin_smartcard_please_enter_ad_mapping_attribute":"Please select a mapping attribute in Active Directory.","adssp_configuration_cached_credentials_client_location_msg_fortinet":"Example: C:\\\\Program Files (x86)\\\\Fortinet\\\\FortiClient\\\\FortiSSLVPNclient.exe","adssp_js_calendar_selectDate":"Select Date","adssp_admin_settings_connection_ssl_tool_enter_all_fields":"Please don't leave any fields empty","adssp_admin_config_pwd_sync_automatic_link_alert_openldap":"User accounts will be automatically linked  if the usernames are the same in both AD and OpenLDAP","ads_support_roboupdate_downloading":"<span class=adsfontSize12>Downloading updates...<\/span>","adssp_common_text_valid_url":"Please Enter the Valid URL","adssp_admin_config_pwd_sync_automatic_link_alert_google":"User accounts will be automatically linked  if the usernames are the same in both AD and Google App.","adssp_configure_auto_enroll_schedule_cancel_confirm":"Any changes done in the scheduler have not been save. Do you want to proceed?","adssp_admin_config_mfa_disable_fp_auth":"Disable Fingerprint Authentication","adssp_domain_user_enrollment_ver_code_dont_leave_emp_mail":"Don\\'t leave the field empty. Please mention the email ID to which you want to receive the verification code.","adssp_admin_server_settings_mail_enter_valid_sms_content":"Please enter a valid message content","adssp_configuration_ppe_enter_restricted_patterns":"Please enter the restricted patterns.","adssp_admin_policies_policy_config_apc_reset_unlock_enforce_pwd_his_info1":"Checking \\\"password history settings\\\" during a password reset is impossible due to Active Directory\\'s design.","adssp_admin_product_settings_server_settings_enter_vaild_email":"Please enter a valid email address.","adssp_admin_policies_policy_config_apc_reset_unlock_enforce_pwd_his_info2":"So, the system attempts to collect old password from users who can remember them or assigns a temporary password for them, which enables it to check password history settings.","adssp_domain_user_reset_qa_dont_use_username_ans":"Do not provide your name as an answer.","adssp_configuration_gina_mac_error_unsupported_os":"Operation Failed: Unsupported OS","adssp_admin_policies_policy_config_apc_reset_unlock_enforce_pwd_his_info3":"Alternatively, you can even enable this feature only for password expired users.","adssp_admin_policies_policy_config_apc_reset_unlock_enforce_pwd_his_info4":"It will unlock the user account if it is locked.","ads_admin_product_settings_ha_pip_already_used":"Virtual IP address is already mapped with some other component. Please try a different IP address.","adssp_admin_policies_enroll_settings_alert_enter_email_add":"Please Enter user e-Mail Addresses separated by comma.","adssp_common_text_popuptitle_select_groups":"Select Groups","adssp_config_admin_tools_helpdesk_que_mapped_in_mfa_unable_to_delete":"Unable to delete this question. This question is already used in AD Security Questions method under multi-factor authentication. Please disable the question and then try again.","month_sep":"September","ads_iamapps_cert_generating_btn":"Generating certificates...","adssp_configuration_selfservice_password_expiry_push_notification_message_limit_exceeded":"Message Size Exceeded","adssp_domain_user_reset_qa_sel_ques_text_the_ans_should_between_to_chars_long":"'The answer(s) should be between '+ var1 +' - '+ var2 +' characters long'","admin_policy_alert_selecting_ous":"Selecting a OU(s) is mandatory.","selectADObject":"Select an AD Object.","adssp_config_su_layout_phone_format_title_txt":"When multiple phone formats are given, only a text box will be shown in the place of the formatted field.","adssp_config_step_notify_acc_expired_users":"Notify Account expired users.","adssp_config_admin_tools_helpdesk_alert_select_policy":"Select at least one policy.","adssp_login_tfa_alert_confiure_sms_server_new":"Configuration of SMS server is must. So please configure the 'Server Settings' first. Do you want to proceed without saving other changes?","adssp_config_sulayout_rule":"Rule","no_host":"Could not find the Host","adssp_configuration_cached_credentials_client_location_msg_cisco_anyconnect":"Example: C:\\\\Program Files (x86)\\\\Cisco\\\\Cisco AnyConnect\\\\vpncli.exe","adssp_config_mfa_adsqa_quest_mapped_wf_cannot_delete_question":"Unable to delete this question. It is being used in approval workflow.","adssp_admin_sso_hide_admin_login_alert":"You must first enable Hide Self-Service Admin Login setting before enabling login SSO settings.","adssp_common_text_summary_view":"Summary View","adssp_configuration_sulayout_manager_default_value":"DN of a User","adssp_common_text_enter_valid_email":"Enter a valid email ID.","adssp_reports_acc_expired_notification_mail_content":"Dear %userName%,\\n\\nYour account expired on %dateTime%. So, please contact your administrator.\\n\\nThank you.\\n\\nRegards\\nAdministrator","adssp_admin_policies_policy_config_status_unable_message":"Cannot delete! At least one policy should remain configured for a domain.","adssp_enrollment_alert_configure_sqa":"You are required to configure Security Question & Answer.","adssp_reset_unlock_accounts_secret_ques_alert_enter_ans":"Please enter your answer","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_wide":"Wide","adssp_reports_enroll_rep_disenroll_select_users":"Select user(s) to Disenroll","adssp_admin_config_pwd_sync_automatic_link_alert_oraebs":"User accounts will be automatically linked  if the usernames are the same in both AD and Oracle E-bussiness suite.","adssp_configuration_gina_mac_error_agent_configuration":"Operation failed due to improper login agent configuration.","adssp_admin_general_custom_disp_settgs_alert_valid_domain":"Please select a Domain and continue.","ads_configuration_mdm_not_valid_host":"Invalid Server name (or) IP.<br/> Please Try Again with a different Server Name.","ads_admin_product_settings_ha_server_restart_later":"Restart Later","adssp_config_policy_config_advanced_alert_random_que_lessthan_total_que":"Number of questions to be displayed at random should not be greater than the total number of questions.","adssp_domain_user_cp_rp_pwd_strength_too_short":"Too short","adssp_select_changepwd_cannotchange_atonetime":"You cannot select both 'User must change password at next logon' and  'User cannot change password' for the same user.","ads_admin_product_settings_ha_slave_service_privilege_success":"User credentials for the ADSelfService Plus service in standby server updated successfully. Restart the service for changes to take effect.","adssp_reports_audit_licensedusers_alert_select_user_cannot_reset":"The disclaimer status of the selected user(s) can't be reset.","adssp_admin_server_settings_mail_enter_valid_smpp_cred":"SMPP Credential should not be empty.","adssp_export_settings_no_changes_found":"No modifications found.","adssp_admin_policyConfig_thirdStep_edit_ques_force_ques":"You are trying to force more questions than you opted for.","adssp_admin_policies_policy_config_apc_reset_unlock_enforce_pwd_change_pwd":"To make this feature work : User Cannot Change Password flag should be disabled.","adssp_tab_license_alert_enter_proper_license":"Please enter a proper license file.","adssp_su_custom_field_cant_delete_mapped_in_ad_question":"Unable to delete this attribute.It could be configured for a AD Security Question in multi-factor authentication or approval workflow.","adssp_login_pwdexpiry_cannotchangepwd":"You have selected 'Password never expires'. The user will not be required to change the password at next logon.","ads_iamapps_config_alert_delete":"Delete","pwdExpiry":"You have selected 'Password never expires'. The user will not be required to change the password at next login.","month_jul":"July","adssp_admin_policies_policy_config_apc_pwd_pol_spl_ch":"'- should contain at least '+val+' special characters'","month_jun":"June","adssp_admin_selfupdate_layout_do_you_want_to_del":"Do you really want to delete this? Press \\'OK\\' to delete (or) Press \\'Cancel\\' to retain it.","adssp_admin_server_settings_vpn_enter_server":"Please enter VPN Server name","ads_admin_product_settings_ha_entries_not_null":"Mandatory fields cannot be left blank.","adssp_admin_config_mail_attachment_file_not_supported":"file is not supported.","adssp_admin_selfupdate_layout_drop_down_box":"Drop Down Box","ads_iamapps_custom_saml_alert_delete_custom_app_config":"Deleting this application will also delete the SSO settings you've configured for its domains. Do you want to continue?","adssp_admin_schedulelist_monthly_schedule":"on every month","adssp_config_policy_config_advanced_alert_enter_positive_no":"Please enter a positive number.","ads_configuration_mdm_devices_no_devices_selected":"Please select at least one Device","adssp_config_admin_tools_helpdesk_que_mapped_in_mfa_confirm_change_attr_mapping":"This question is also used in multi-factor authentication. Are you sure you want to change the attribute mapping?","adssp_admin_policy_config_unable_delete_policy":"val+' user(s) are enrolled. You can delete this policy only after disenrolling them.'","ads_admin_logon_settings_smartcard_settings_partial_success":"Please enable at least one configuration to use smart card authentication.","ads_admin_smartcard_please_select_linked_domains":"Please select at least one domain.","adssp_admin_customize_db_backup_schedule_try_after_few_minutes":"Please try again after few minutes.","adssp_admin_adsearch_select_search_criteria":"Please select a field for the \\'Search Criteria\\'.","admin_schedule_reports_for_x_days":"'for '+field+' days '","admin_policy_alert_policy_name_mandatory":"Enter a Policy Name & Selecting a policy is mandatory.","adssp_common_alert_select_group_ou":"Please select a group/OU.","adssp_domain_user_enrollment_ver_code_enter_mail_id":"Enter your email id","adssp_admin_server_settings_vpn_enter_domain_name":"Mandatory fields cannot be left empty.","adssp_domain_user_reset_qa_sel_ques_alert_ans_should_be":"The answer(s) should be","adssp_common_text_selecting_domain_man":"Select a domain.","adssp_common_text_cannot_moveup":"You cannot move this up further.","adssp_reports_enroll_rep_non_enroll_show_notified":"Show already notified users only","adssp_login_tfa_alert_choose_verify_mode":"Please select at least one of the Verification code methods.","adssp_configuration_cached_credentials_site_name":"VPN Site Name","adssp_admin_selfupdate_layout_custom_field_ldap_name_already_exist":"Attribute LDAP name Already Exists.","ads_layout_admin_logon_settings_saml_tab_photo_upload_invalid_format":"Please make sure the IdP logo is in JPG, JPEG, GIF, PNG, or BMP image format.","adssp_common_alert_select_group_sel":"Please select at least one group.","adssp_admin_logon_customize_dragndrop_htmlarea_fontsize_6_point":"6 (24 pt)","adssp_admin_policyConfig_thirdStep_edit_ques_max_len":"Question length should not exceed 1000 characters.","ads_admin_product_settings_ha_pip_range_error":"The virtual IP address must be in the same network as the primary and standby servers.","adssp_configuration_soon_to_exp_disable_html":"Disable HTML","adssp_domain_user_cp_rp_pwd_strength_good":"Good","nextMon":"Next month (hold for menu)","SelectQues":"Please select a question.","adssp_config_gina_bypass_on_adssp_server_unreach":"If you uncheck this option, then users will not be able to login when ADSelfService Plus is not running.","adssp_admin_customize_db_backup_schedule_next_db_backup_text":"<span class=\\\"redtxtbold\\\">PS: <\/span>Because You need at least one minute interval between successive backups","adssp_config_mfa_adsqa_quest_mapped_wf_confirm_edit_text":"This question is used in workflow. Are you sure you want to edit the question?","adssp_common_text_no_ou_selected":"No OUs Selected. Select the OU(s) and then proceed.","adssp_configuration_task_scheduler_pre_requisite_enable":"At least one policy should be configured with Reset Password or Unlock Account to enable this reminder.","ads_iamapps_config_alert_error_configuration":"Cannot disable auto account linking for SSO-enabled apps.","adssp_configuration_cached_credentials_client_location_msg_sonic_wall_global_vpn":"Example: C:\\\\Program Files (x86)\\\\SonicWall\\\\SonicWall Global VPN\\\\swgvc.exe","adssp_admin_general_custom_disp_settgs_alert_access_control_admin_login_small_ip":"To IP address should be greater than From IP address","adssp_popup_common_search_errormsg_text_no_objs_found_refresh":"No matching object(s) found. Please refresh (could take some time) and search again.","adssp_admin_gina_err_in_progress_troubleshoot":"1. Another installation is already in progress.<br>2.Try to install after few minutes","calendarFlat":"Calendar.setup:  Flat specified but can't find parent.","adssp_config_mfa_adsqa_edit_ques_mandatory":"Set as Mandatory","ads_admin_product_settings_ha_update_service_cred":"Update Service Credentials","ads_admin_smartcard_please_import_root_ca_certificate":"Please import a valid root CA certificate.","adssp_admin_restricted_unowned_msg":"These are the user accounts that don't exist in AD anymore but are wasting licenses.","adssp_config_admin_tools_pwd_sync_already_disabled":"The selected hosts are already disabled","ads_configuration_mdm_deviceenrollment_warning_mail_sent":"Failed to send email notification to some of the users.","adssp_admin_policies_enroll_settings_separated_commas":"You can type email addresses here, separated by commas.","adssp_configuration_ppe_enter_positive_number_for_pass_phrase_len":"Please enter a value between 1 and 127 for the password length required to override all complexity rules.","adssp_admin_selfupdate_layout_custom_field_already_exist":"Attribute Already Exists.","adssp_admin_policies_soon_to_expire_upload_text":"No files selected","adssp_configuration_gina_invalid_csv_file_format":"Invalid file format. Enter a CSV file","adssp_config_admin_tools_helpdesk_policy_permission_alert":"The following action(s) does not fall under the scope of this policy:","ads_common_alert_search_pls_enter_text":"Please enter text to search","admin_policy_alert_name_already_use":"The policy name you have chosen is already in use. Choose another policy name.","adssp_login_tfa_alert_passcode_mandatory":"Please provide a valid passcode to continue.","adssp_configuration_cached_credentials_client_location_msg_checkpoint":"Example: C:\\\\Program Files (x86)\\\\CheckPoint\\\\Endpoint Connect\\\\trac.exe","adssp_admin_domain_settgs_leastonedc":"Please select at least one Domain Controller.","adssp_js_calendar_day_sat":"Sat","ads_admin_logon_settings_smartcard_settings_delete_config":"Delete Smart Card","adssp_configuration_ppe_only_for_rp":"This rule applies only to password resets. It doesn\u2019t apply to change passwords and password resets done from ADUC.","ads_admin_product_settings_ha_server_restart_later_note":"Please make sure you restart the primary server first and then the standby server.","adssp_configuration_ppe_unic_tip":"Unicode characters includes non English characters (ギ ,羊 ,ما ), symbols (✓ ,✖ ,¿ ,¡ ) etc.","adssp_config_mfa_advanced_mail_format_invalid":"Please enter a valid domain name.","adssp_admin_general_custom_disp_settgs_alert_valid_captcha_refreshtime":"Specify an integer value greater than 0 for reset invalid login attempts count","ads_admin_smartcard_disabling_tohttp_will_disable_smart_card_logon_also":"Disabling https will disable smartcard logon support.","admin_common_text_confirm_msg_r_u_sure_delete":"Are you sure want to delete this ?","adssp_admin_logon_customize_dragndrop_htmlarea_fontsize_1_point":"1 (8 pt)","AllOUList":"All","adssp_js_calendar_prevYr":"Prev year (hold for menu)","adssp_config_sulayout_manager_field":"Manager Field","adssp_configuration_ppe_enter_positive_number_for_min":"Please enter a value between 1 and 127 for the minimum password length.","adssp_configuration_selfservice_self_update_create_layout_group":"Group","adssp_admin_policies_policy_config_apc_pwd_pol_both_case":"'- should include both upper & lower cases'","rem_com":"Remote Command Returned","ads_admin_product_settings_ha_service_not_installed":"{0} service is not installed in both Primary and Standby servers. Please install it as a service and then continue.","adssp_admin_policy_security_ques_should_not_blank":"Security questions should not be blank.","adssp_reports_audit_alert_enter_valid_date":"Please select a valid date.","adssp_domain_user_my_info_mandatory_alert_new":"Please fill the mandtory fields.","adssp_layout_admin_logon_settings_mobile_alert_an_actionbtn_enabled":"At least one of Password Reset, Unlock Account or Change Password button must be selected.","adssp_admin_configuration_tech_alert_cannot_reset_password":"You cannot reset your password while you are logged in.<br>But you can change it at:<br><b>Admin-->Personalise<\/b>","checkProxyAddress":"Option can be checked when there is email proxy address.","adssp_domain_user_reset_qa_use_different_ans":"Give unique answer to each question","ads_admin_product_settings_ha_master_bindaddress_error":"You cannot set up high availability when bind address is configured in primary server.","adssp_admin_config_mfa_enable_mobile_auth":"Enable Google Authenticator","day_sun":"Sun","EnterDC":"Enter the Domain Controller to add","adssp_config_gina_err_logon_failure_unknow_user_bad_pwd_troubleshoot":"1.Configure Domain Settings(When Run As Console) / Logon Tab(When Run As Service) with Administrative Credentials<br/><br/>2. Check if the admin share is enabled for Windows.","adssp_admin_gina_no_file_troubleshoot":"The system cannot find the file specified","adssp_admin_importanswers_blank_importcsv":"Select the CSV file field cannot be blank. Browse to select CSV file.","ads_iamapps_config_alert_max_chars_exceeded_desc":"Maximum characters length (250) exceeded for description field","adssp_configuration_cached_credentials_client_location_msg_custom_vpn":"Please provide the path for VPN CLI exe,eg : C:\\\\Program Files(x86)\\\\Fortinet\\\\Forticlient.exe","adssp_config_admin_tools_helpdesk_atleast_one_action_need_to_be_selected":"At least one action must be selected.","adssp_reports_enroll_rep_enroll_confirm_delete":"Are you sure you want to disenroll {0} user(s).?<br />Note :The technician status of the disenrolled user will be deleted.","adssp_config_policy_config_no_policy_for_enrollment":"There are no policies eligible for Enrollment. Do you want to edit policies?","adssp_admin_selfupdate_layout_do_you_want_to_delete_msg":"Deleting this field will also delete the conditions in the modification rules in which this field is being used. Do you want to proceed?","QAOverWritten":"User's Q&A will be Overwritten.","ads_iamapps_config_alert_sp_logo_upload_size_exceeded":"Icon size exceeds the expected one.","adssp_admin_gina_couldnot_start_remote_service_troubleshoot":"Couldn't Start Remote Service","adssp_admin_config_mail_attachment_remove_failure":"Error in removing the file","adssp_admin_configuration_tech_alert_mandatary_user_account":"You can not modify the default admin account\u2019s role.","adssp_admin_policies_policy_config_alert_positive_no_char_ans_que":"Please set the minimum & maximum number of characters for users\u2019 answer(s). (Enter a number greater than zero)","adssp_configuration_ppe_choose_txt_file":"Please upload only text file.","adssp_config_policies_notification_updated_attr_once":"%updatedAttributes% macro can be used only once in the mail content.","adssp_js_calendar_month_may":"May","adssp_admin_logon_customize_dragndrop_htmlarea_justify_center":"Justify Center","key1":"Alert I18N Works Fine.","adssp_admin_policies_enroll_settings_select_domain":"Please select a domain","ads_iamapps_cert_regenerating_btn":"Regenerating","adssp_commom_text_advanced":"Advanced","adssp_admin_policy_config_secure_link_apc_notify_rp_mail_verify_code_body":"Dear %userName%,\\n\\nWe understand that you want to reset your password/unlock account.  Please click the link below to proceed: %secureLink%\\n\\nRegards,\\nAdministrator","adssp_admin_importanswers_select_ques":"Please select a question.","adssp_reports_lincensedUsers_reset_users_empty":"Select user(s) to reset the Disclaimer Status","adssp_configuration_ldap_name_contains_letters_numbers_hypen":"LDAP name must start with an alphabet and contain only numbers, letters, and hyphens.","adssp_common_text_generate":"Generate","adssp_js_calendar_month_mar":"March","adssp_admin_configuration_tech_alert_confirm_delete_message":"Are you sure want to delete this technician?","adssp_domain_user_enrollment_part_enroll_new":"Complete your enrollment now!","adssp_login_tfa_alert_confiure_sms_server":"Configuration of SMS server is must. So please configure the 'Server Settings' first.","adssp_admin_logon_settings_multi_login_restricted_attr":"You are not allowed to add this attribute.","adssp_config_mfa_adsqa_edit_ques_reset_mandatory":"Reset Mandatory","adssp_common_alert_empty_choices":"Choices field cannot be empty.","adssp_admin_config_mfa_enable_rsa_auth":"Enable RSA SecureID","adssp_admin_configuration_tech_alert_enter_valid_username":"Please enter a valid login name","ads_admin_product_settings_ha_server_restart_error":"Unable to restart the server. Please try manually.","month_mar":"March","adssp_layout_admin_logon_settings_mobile_tab_select_a_domain":"Please select a Domain and continue","adssp_admin_logon_customize_dragndrop_htmlarea_insert_link":"Insert Web Link","adssp_domain_user_my_info_email_alert":"'Enter valid email address in \\\"'+labelName+'\\\" field.'","adssp_domain_user_enroll_phone_num_any_format_alert":"Enter your mobile numbers in any one of the formats specified below: <br><br>{0}","adssp_admin_customize_logon_drag_drop_url_duplicate":"URL with the same name exists. Kindly provide a different name","adssp_config_admin_tools_helpdesk_question_delete_confirm_msg":"Are you sure you want to delete this question?","adssp_admin_gina_err_couldnotconnect":"Could not connect to the machine.","adssp_admin_general_custom_disp_settgs_alert_access_control_admin_login_invalid_ip":"Invalid IP Address","day_mon":"Mon","adssp_admin_policies_policy_config_apc_pwd_pol_min_pwd_len":"'- minimum password length up to '+val","adssp_configuration_gina_pls_select_ous":"Please select OU(s)","adssp_config_mfa_advanced_alert_random_que_lessthan_ad_man_ques":"Number of questions to be displayed at random should not be less than the total number of AD security questions you've marked as mandatory.","notConnect":"Could not Connect to the machine","pwdProperty":"You cannot select both 'User must change password at next logon' and  'User cannot change password' for the same user.","adssp_admin_logon_customize_dragndrop_htmlarea_fontsize_5_point":"5 (18 pt)","adssp_admin_selfupdate_layout_fields_cannot_empty":"The Group Containers cannot be empty. Drag and drop the fields in appropriate containers and hit on save.","adssp_config_admin_tools_helpdesk_enter_question":"Enter security question","noMailReceipient":"No Mail Recipients.","month_may":"May","adssp_admin_restricted_referesh_domain":"To get the most updated list, please refresh AD & ADSSP synchronization before you use this feature.","ads_common_text_click_to_update":"Click Here to Update.","adssp_end_user_click_to_continue":"Click Here to Continue.","adssp_su_custom_field_in_layout_unable_to_update":"Unable to update. This attribute is used in a self-update layout.","adssp_domain_user_select_account_alert":"Please select anyone of the account","ads_admin_product_settings_ha_pip_same_as_slave":"Virtual IP address is already mapped with the standby server. Please try a different IP address.","adssp_configuration_ppe_enter_positive_number_for_max":"Please enter a value between 1 and 127 for the maximum password length.","adssp_choose_recipient_select_email_value_alert":"Please select an email Id.","adssp_configure_policy_config_apc_auto_hourly_sch":"The hourly schedule time should not be \\\"0\\\". Please change it.","adssp_admin_logon_customize_dragndrop_htmlarea_justify_full":"Justify Full","adssp_admin_policies_policy_config_alert_positive_no_char_user_def_que":"Please set the minimum & maximum number of characters for user-defined questions. (Enter a number greater than zero)","adssp_admin_settings_connection_ssl_tool_dns_comp_err_msg":"SAN Name must start with a letter and end with a letter or digit. The remaining characters can be letters, digits, or hyphens.","ads_configuration_mdm_pushmanager_settings_upload_apns":"Upload the certificate in .pem format","adssp_common_text_popuptitle_select_users":"Select Users","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_couriernew":"Courier New","adssp_common_tree_view_expand_collapse":"Expand/Collapse Item","adssp_admin_policies_policy_config_apc_pwd_pol_start_alph":"'- should start with an alphabet'","adssp_common_text_cannot_movedown":"You cannot move this down further.","adssp_admin_config_mfa_enable_totp_auth":"Enable Time-based One-time Password Authentication","adssp_admin_enrollment_notification_push_notification_text_push_send_confirm":"Are you sure you want to push enrollment notification to users mobile devices?","adssp_admin_logon_customize_dragndrop_htmlarea_bold":"Bold","adssp_configuration_cached_credentials_server_name":"VPN Hostname/IP","ads_admin_product_settings_ha_restart_slave":"High Availability can be disabled only from the standby server. Please shutdown {0} in the primary server and start it from the standby server.","adssp_admin_customize_logon_drag_drop_enrollment_desc":"Establish your identity via registration","adssp_common_navigation_count":"{0} - {1} of {2}","adssp_admin_gina_err_remote_connection":"Initiating Connection to Remote Service . . .  Failed","adssp_login_tfa_alert_empty_fields":"Some of the fields are left empty.","adssp_js_calendar_day_wed":"Wed","adssp_domain_user_enrollment_ver_code_duplicate_mob_num":"Duplicate mobile number found. Kindly provide a unique one.","adssp_config_admin_adsqa_less_than_random_ques":"The random no. of questions to display is greater than the total no. of AD Security Questions.","adssp_js_calendar_month_oct":"October","adssp_admin_customize_logon_drag_drop_alert_to_save":"Do you wish to save the changes done if any, before continue.","ads_iamapps_custom_saml_fill_app_name":"Application Name cannot be left empty.","adssp_admin_configuration_tech_alert_cannot_delete_logged_user":"You cannot delete a logged on technician","adssp_admin_logon_customize_dragndrop_htmlarea_font_color":"Font Color","adssp_admin_general_adsearch_group_info":"Group Info","adssp_admin_logon_customize_dragndrop_htmlarea_justify_right":"Justify Right","ads_layout_admin_logon_settings_saml_tab_photo_upload_size_exceeded":"Please make sure the IdP logo image size does not exceed 20 MB.","ads_admin_product_settings_ha_not_supported_slave":"{0} in the standby server does not support high availability due to version incompatibility.","adssp_admin_policies_policy_config_apc_pwd_pol_pre_ch_frm_name":"'- should not borrow 3 consecutive characters from username'","adssp_admin_policyConfig_thirdStep_edit_ques_minques_del_futher":"'Minimum 3 Administrator-Defined Questions should be present in the list. Cannot delete any further.'","ads_support_roboupdate_connecting":"Connecting...","adssp_admin_policy_config_confirm_delete_policy":"Are you sure, you want to delete this policy?","admin_schedule_reports_page_select_time":"At","adssp_reports_enroll_rep_disenroll_blank_import_csv":"Please select a CSV file.","ads_iamapps_custom_saml_alert_choose_rsa_algorithm":"Please choose RSA SHA Algorithm","selectTheUser":"Please select the user(s).","adssp_config_mfa_create_configuration_confirm_overwrite":"Apply to all policies","adssp_admin_policies_mobile_app_restriction_disable_mobile_one_auth":"Please disable Mobile App Authenticator for all policies in Multi-factor Authentication to restrict mobile app access.","adssp_admin_policies_enroll_settings_conf_mail_server_non_empty":"Mail content/subject cannot be empty.","adssp_common_color_picker_hexadecimal":"Hexadecimal&nbsp;:&nbsp;","adssp_enrollment_alert_configure_one":"Please enroll for at least one verification method!","adssp_admin_configuration_tech_alert_mandatary_cannot_deleted":"This is a default admin account. You cannot delete it","adssp_admin_selfupdate_layout_fill_all_values":"Fill all values","adssp_configuration_ppe_enter_positive_number_for_spl":"Please enter a value between 1 and 127 for minimum number of special characters required.","adssp_config_admin_tools_helpdesk_alert_must_integrated":"You must integrate ADSelfService Plus and ADManager Plus to enable this feature.","adssp_config_mfa_adsqa_quest_mapped_other_policies_confirm_change_attr_mapping":"This question is used in another self-service policy. Are you sure you want to change the attribute mapping?","adssp_common_layout_footer_feedback_enter_valid_phnum":"Please enter a valid number.","adssp_admin_configuration_tech_alert_cannot_change_role":"You cannot change the role of a logged on user","adssp_layout_admin_logon_settings_mobile_tab_photo_uploading_empty_file":"Invalid image file","adssp_admin_server_settings_sms_addon_buy_now":"This feature is exclusive to ADSelfService Plus SMS Addon Pack. Please purchase the 'SMS Addon' if you wish to enjoy its benefits.","adssp_config_sulayout_multi_option_field":"Multi Option Field","ads_admin_product_settings_ha_slave_version_error":"You cannot set up high availability between two different versions of {0}.","adssp_common_alert_number_exceeds_maximum":"Character length exceeds the maximum length allowed in active directory","adssp_common_text_enter_select_computer":"Please select a computer to restrict Service Accounts","adssp_js_calendar_day_mon":"Mon","ads_admin_product_settings_ha_slave_not_running_as_service":"{0} in the standby server is not running as a service. Please install it as a service and then continue.","adssp_config_admin_tools_helpdesk_duplicate_question":"This security question already exists.","adssp_config_admin_tools_helpdesk_duplicate_attribute":"Selected attribute has already been mapped with another security question.","adssp_configuration_ppe_min_greater_than_sum_of_spl_num":"Please make sure that the minimum password length is greater than or equal to the sum of required special characters, numeric characters, unicode characters, upper and lower case letters.","adssp_config_gina_cp_process_completed":"Process is completed.","adssp_admin_server_settings_sms_enter_valid_url_parameters":"Enter valid HTTP URL Parameters","adssp_login_tfa_alert_confiure_duo_server":"Configuration of Duo server is must. So please configure the 'Server Settings' first.","month_nov":"November","adssp_reports_audit_rep_failed":"Failed","adssp_config_management_gina_custom_provide_proper_size":"Icon size should not exceed 250kb","adssp_admin_selfupdate_layout_sorry_atleast_one_group":"Sorry! At least one Group should be there.","adssp_admin_policies_scheduler_soon_to_expire_msg_third_templete":"Dear %userName%,\\n\\nDespite all the reminders, you have still not changed your password, which will expire on %dateTime%. If you do not change it now, you might find yourself locked out of your computer! Please change it immediately.\\n\\nRegards\\nAdministrator","adssp_admin_policies_policy_config_alert_atleast_one_que_ans":"A user has to answer at least one security question. So enter a number (greater than zero) in either of the first two fields.","adssp_layout_admin_logon_settings_mobile_tab_photo_upload_dimensions_exceeded":"The selected image exceeds the allowed dimensions limit. Please make sure the image is of dimensions: 1000x400 pixels","adssp_admin_restricted_inactive_users_days":"Inactive Users for last {0} days.","adssp_configure_policy_advanced_config_policy":"Config Policy","adssp_admin_policies_scheduler_soon_to_expire_dear_admin_msg":"Dear Admin,\\n\\nAttached with this mail is the report, which indicates delivery status of 'password/account expiry notifications' to end-users. The same file can also be found in the storage path chosen by you.\\n\\nRegards,\\nADSelfService Plus","ads_admin_product_settings_ha_public_ip_not_valid":"Invalid virtual IP address.","adssp_su_custom_field_cant_delete_mapped_in_login_attribute":"Unable to delete this attribute.This attribute is being used as login Attribute.","adssp_configuration_gina_mac_error_unsupported_architecture_troubleshoot":"1. The client software does not support this machine architecture.<br><br>2.For linux machines, the supported architectures are x86_64(64bit) and i686(32bit).","adssp_configuration_ppe_min_no_of_cond_tip":"Dictionary, Patterns, Override, Password History rules will not be included in minimum number of conditions to be satisfied.","nomailToRemove":"No E-mail Address to remove.","adssp_admin_logon_customize_dragndrop_htmlarea_justify_left":"Justify Left","adssp_config_management_custom_text_port_no_valid_msg":"Please provide a valid port number","saturday":"Saturday","adssp_configuration_ppe_dict_filename_size":"Filename cannot be greater than 200 characters.","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_narrow":"Narrow","adssp_reports_common_text_filter":"Filter","adssp_admin_policies_mobile_sms_identity_text_contain_macro":"Please modify the mobile verification message content to include the {0} macro to use the selected option.","adssp_configuration_ppe_override_pwd_his":"Password History rules will not be overridden with this rule.","adssp_admin_gina_network_path_not_found":"The network path was not found.","adssp_export_settings_success":"Export settings saved successfully","ads_admin_product_settings_ha_primary_secondary_same":"Primary and standby servers cannot be the same.","adssp_configuration_ppe_min_greater_than_max":"Please make sure that the maximum password length is greater than or equal to the minimum password length.","adssp_admin_license_management_restrict_users_inactive_users":"Inactive Users","adssp_reports_enroll_rep_disenroll_e_mail":"Mail ID","ads_admin_product_settings_ha_service_privilege_failure":"Failed to update user credentials for the service in both primary and standby servers. Please update it manually and try again.","adssp_config_gs_default_name":"Subscription","adssp_successfully_deleted":"Successfully Deleted","adssp_login_tfa_alert_choose_auth_mode":"Please select any one of the Authentication methods.","adssp_js_calendar_thursday":"Thursday","adssp_admin_configuration_tech_alert_select_user":"Please select the technician","ads_iamapps_config_alert_cant_enable_status":"You can't enable status of this configurations.","adssp_admin_selfupdate_layout_advanced_thumbnail_size_restriction":"Size cannot exceed 100KB for thumbnailPhoto","adssp_configuration_admin_tools_ext_data_source_delete_datasource":"Deleting an established datasource will also delete its corrosponding Security Q&A Fetcher!","adssp_admin_policies_mobile_one_auth_disable_restriction":"Please disable 'Restrict Mobile app access' in Mobile Settings.","adssp_common_text_type_your_mail_message":"<Type your mail message here>","adssp_config_management_custom_text_provide_installation_modules":"Please Select atleast one module","ads_common_text_all":"All","adssp_admin_policies_policy_config_confirm_delete_message":"Are you sure you want to delete this layout ?","adssp_js_calendar_month_jul":"July","adssp_js_calendar_month_jun":"June","adssp_configure_policy_config_apc_auto_generate_pwd_pol_fail":"If the auto-generated password fails to comply with the domain password policy or Have I been Pwned? service you have integrated in ADSelfService Plus or failure in sync accounts , then the user will be redirected to the password reset page to manually reset the password.","ads_iamapps_custom_saml_enter_category_name":"Please enter a valid Category name","adssp_admin_policies_policy_config_apc_pwd_pol_exclude_words":"'- prevent the use of these patterns '+val","adssp_config_mfa_advanced_mail_format_exceed_count":"Number of mail domains should not exceed 20.","adssp_domain_user_cp_rp_pwd_strength_strong":"Strong","adssp_admin_configuration_tech_alert_contains_symbol":"Login name should not contain @,\\\\ symbols.","adssp_admin_policies_policy_config_apc_reset_unlock_note":"Note","day_wed":"Wed","adssp_admin_customize_rebranding_reset_to_default_values":"The default <span class=\\\"normalBoldFont common-textcolor\\\">Display Settings<\/span> will be restored. Do you wish to continue?","adssp_config_admin_tools_helpdesk_select_attribute_warning":"Please select the corresponding LDAP attribute.","adssp_common_text_type_your_mail_message_new":"&lt;Type your mail message here&gt;","adssp_admin_server_settings_mail_enter_valid_email":"Please enter a valid email address","adssp_admin_logon_customize_dragndrop_htmlarea_horizontal_rule":"Horizontal Rule","adssp_configuration_gina_install_process_out_of_computers":"' out of '+val+ ' computers'","day_sat":"Sat","adssp_admin_customize_logon_drag_drop_reset_pwd":"Reset Password","adssp_js_calendar_month_sep":"September","ads_admin_product_settings_ha_invalid_account_format":"Invalid Format for Account.","adssp_configuration_sulayout_initial_value_valid_integer":"Initial Value should be an Interger","adssp_config_admin_tools_helpdesk_one_question_selected":"At least one security question must be enabled.","adssp_configuration_ppe_max_greater_than_sum_of_spl_num":"Please make sure that the maximum password length is greater than or equal to the sum of required special characters, numeric characters, unicode characters, upper and lower case letters.","adssp_config_sulayout_empty_assign_value_txt":"[Value not assigned. This attribute's value will be cleared in AD.]","adssp_login_tfa_alert_saml_metadata_file_invalid":"Please upload a valid Metadata file","adssp_admin_policy_config_navigate":"Are you sure you want to navigate away from this page?\\n Your changes have not been saved.","adssp_configuration_task_scheduler_enter_enroll_UI_text":"Please enter the Message To Be Conveyed","adssp_config_gina_err_couldnot_copy_msi":"1.Insufficient privilege to access the client machine.<br/><br/>2.Update the credential provided under the \\\"Domain Settings\\\" if  Self Service Product is running as an application or when running as service, update service account's credential on the \\\"LogOn\\\" tab under the service properties.","adssp_config_policy_config_advanced_alert_requester_missing":"The request must contain a requester parameter.","adssp_admin_gina_install_success":"Successfully Installed","adssp_admin_config_mfa_enable_push_auth":"Enable Push Notification Authentication","adssp_login_network_error_message":"Network connection error. Please contact your administrator.","adssp_domain_user_enroll_phone_num_alert":"'Enter the numbers  in \\\" mobile \\\" field in the following format {0}'","ads_common_heading_message_alert":"Alert Message","adssp_common_text_warning":"WARNING","ads_configuration_mdm_pushmanager_settings_csr_generation_improper_country_length":"Make sure Country Code is 2 letters!","admin_policy_alert_policy_mandatory":"You have not selected any self-service feature.","adssp_reports_license_delete_pop_msg_txt":"'You have chosen to delete <span style=\\\"color:#000;font-size:12px\\\">'+var1+' user(s)<\/span>. Please confirm their deletion.'","adssp_successfully_updated":"Successfully Updated","adssp_layout_admin_logon_settings_mobile_tab_mobile_settings_reset_to_default_values":"The default <span class=\\\"normalBoldFont common-textcolor\\\">Mobile Settings<\/span> will be restored. Do you wish to continue?","ads_iamapps_config_alert_sp_big_logo_upload_dimensions_exceeded":"Large icon size exceeds","adssp_config_sulayout_empty_assign_values":"Rules with empty 'Assign Values' section will not be saved in this Layout. Do you want to proceed?","adssp_support_alert_emptyemail":"Email ID should not be empty.","ads_admin_product_settings_ha_service_not_privileged":"You must configure the {0} service with domain admins privilege in both the primary and standby servers.","adssp_license_expiry_numeric_value_notification_days":"Please enter only numeric values in license expiration notification days.","adssp_admin_selfupdate_layout_sorry_cant_del_default_lay":"Sorry! You cannot delete the Default Layout.","adssp_configuration_admin_tools_ext_dat_source_policy_already_mapped":"Selected policy already mapped to another configuration.","adssp_login_tfa_alert_confiure_mail_server":"Configuration of mail server is must. So please configure the 'Server Settings' first.","adssp_license_expiry_valid_usage_count_limit":"Please note that the maximun allowed configuration limit is 5.","adssp_domain_user_reset_qa_sel_ques_alert_ans_empty":"Please do not leave the answer field(s) blank.","adssp_login_tfa_alert_saml_metadata_file_empty":"Please upload a Metadata file","adssp_config_su_section_duplicate":"Group name already exists.","adssp_admin_policies_sulayout_enter_your_choices_here":"Enter your choices here","adssp_js_calendar_day_sun":"Sun","SupportEmptyEmail":"Email ID should not be empty!","prevMon":"Prev month (hold for menu)","adssp_admin_server_settings_mail_enter_username":"Please enter the User Name","adssp_admin_policies_policy_config_apc_pwd_pol_pre_same_ch":"'- should not repeat a character more than twice'","adssp_domain_user_my_info_valid_characters":"Please enter a valid value","adssp_admin_policy_config_sec_que_que_entered_already_exist":"The question you have entered already exists.","adssp_js_calendar_nextMon":"Next month (hold for menu)","adssp_license_expiry_select_one":"Please select at least any one option in License Expiration Notification Settings.","validateUserName":"entered has one or more illegal characters / \\ [ ]: ; | = , + * ? < > @ \\\\\\\". These are not allowed. Please remove them and try again.","adssp_login_tfa_alert_invalid_radius_server":"Invalid RADIUS server name.","adssp_reports_pwd_expired_notification_mail_content":"Dear %userName%,\\n\\nYour password expired on %dateTime%. So, please change your domain password as soon as possible.\\n\\nThank you.\\n\\nRegards\\nAdministrator","adssp_configuration_gina_pls_enter_text_to_search":"Please enter text to search","adssp_configuration_sulayout_phone_format_valid_allowed_value":"Enter valid allowed values","adssp_admin_policyConfig_thirdStep_edit_ques_set_mandatory":"set as mandatory","ads_admin_product_settings_ha_master_service_privilege_success":"User credentials for the ADSelfService Plus service in primary server updated successfully. Restart the service for changes to take effect.","ajaxError":"There was a problem retrieving the XML data:","adssp_admin_configuration_tech_alert_pwd_dismatch":"Passwords do not match","adssp_common_text_update_failed":"Update Failed","adssp_js_calendar_month_dec":"December","adssp_js_first":"First","adssp_configuration_cached_credentials_client_location_msg_cisco":"Example: C:\\\\Program Files (x86)\\\\Cisco\\\\Cisco IPSec\\\\vpnclient.exe","adssp_layout_domain_setting_dc_already_exists":"has been already added.","adssp_reports_audit_rep_pn_success":"Push Notification sent to push server successfully","adssp_common_text_list":"List","characterNotAllowed":"The characters /:|*?<>\\\\\\\"' are not allowed.","dragToMove":"Drag To Move","ads_admin_product_settings_ha_settings_already_configured":"Unable to configure high availability. <br> High availability setup already exists in the standby server.","adssp_reports_enroll_rep_select_enroll_type":"Select Type","adssp_admin_importanswers_need_properfile":"Please enter a proper file.","adssp_config_policy_config_advanced_alert_nospl_length_greater":"No of Special Character length is greater than maximum length","adssp_admin_policies_identity_more_dup_mail_attrib":"Please remove duplicate email attributes","month_aug":"August","adssp_login_tfa_alert_username_twice_in_radius_pattern":"Please make sure that <b>user_name or USER_NAME<\/b> is not repeated twice in the Username Pattern.","adssp_login_tfa_alert_saml_invalid_login_url":"Please use a valid HTTP/HTTPS url","ads_iamapps_config_alert_only_five_mappings_allowed":"Only 5 continuous mapping can be done","adssp_admin_general_custom_disp_settgs_alert_access_control_invalid_ip":"Some IP Range Fields are either Empty or have Invalid IP Values or have Invalid IP Range.","adssp_config_gina_mac_err_couldnt_copy_linux_install_sh":"Could not copy installLinuxAgent.sh","adssp_admin_logon_customize_dragndrop_htmlarea_enter_url":"Enter URL","adssp_config_mfa_adsqa_quest_mapped_other_policies_cannot_delete_question":"Unable to delete this question. It is being used in another self-service policy.","ads_admin_product_settings_ha_cluster_exception":"Unexpected error occurred. Please contact ADSelfServicePlus support.","adssp_general_attr_checkbox_alert":"'You cannot select multiple values for the \\\"'+labelName+'\\\" field.'","adssp_domain_user_change_pwd_alert_not_match":"Your new password does not match with the confirm password.","adssp_popup_common_search_errormsg_text_no_objs_found":"No Matching Object(s) Found.","adssp_domain_user_ad_questions_alert_enter_ans":"Some questions have been left unanswered. Please answer them before you proceed to the next step.","adssp_config_gina_show_addsp_tile_applies_to_cp":"This option applies to Windows(Vista and above).","adssp_common_text_enter_valid_mob_num":"Enter valid mobile number.","adssp_configuration_ppe_select_atleast_one_rule":"Select at least one complexity rule.","SuppportValidEmail":"Please enter valid Email ID","adssp_admin_importanswers_please_selectques":"-------Please Select a Question-------","adssp_domain_user_my_info_photo_upload_browse_your_photo_and_upload":"Browse your photo and upload","adssp_admin_general_custom_disp_settgs_alert_valid_captcha_invalid_attempts":"Specify an integer value greater than 0 for invalid login attempts","adssp_admin_policies_ste_confirm_delete_scheduler":"Are you sure want to delete the Scheduler?","adssp_js_calendar_tuesday":"Tuesday","adssp_reports_license_reset_pop_msg_txt":"'You have chosen to reset the disclaimer status of <span style=\\\"color:#000;font-size:12px\\\">'+var1+' user(s)<\/span>. Are you sure you want to reset?'","admin_schedule_reports_generate_report_for":"Generate report for:","adssp_reports_schedule_reports_common_expired":"Expires in Next","adssp_admin_configuration_tech_alert_enter_valid_password_radius":"Please enter Radius password","adssp_configuration_cached_credentials_default_open_vpn_connectcommand":"--config \\\"C:\\\\Program Files (x86)\\\\Sophos\\\\Sophos ssl client\\\\config\\\\%user_name%@domainname.ovpn\\\" --auth-user-pass \\\"%tempFile%\\\"","ads_iamapps_config_alert_invalid_domain_name":"Invalid Domain Name","adssp_configuration_ppe_dict_check_type_tip":"If this option is enabled, passwords which contains dictionary words are restricted.<br>If this option is not enabled, passwords which are exact dictionary words are restricted","adssp_config_gina_mac_err_failed":"Failed","adssp_su_custom_field_cant_update_mapped_in_pswdsync":"Unable to update. This attribute is being used for account linking in password synchronizer.","adssp_config_admin_tools_helpdesk_no_policy":"No policy selected","adssp_common_text_port_positive":"Please Enter positive integer for port number","adssp_config_multi_sec_qa_less_than_random_questions":"The random no. of questions to display is greater than the total no. of Security Questions.","ads_iamapps_config_alert_ok":"OK","adssp_configuration_admin_tool_quick_enroll_notify_policy_users":"Are you sure you want to send this message to the users in selected policy?","adssp_admin_schedulelist_disable":"Disable","adssp_js_calendar_sunday":"Sunday","adssp_login_tfa_alert_field_invalid_value":"Please provide a valid {0}.","ads_saml_config_alert_valid_metadata_file":"Please upload a valid Metadata file","adssp_domain_user_enrollment_ver_code_click_cross_to_delete":"Click Delete Icon to remove","adssp_common_text_success_failure":"Unable to save the changes. <b>Reason:<\/b>","adssp_admin_gina_couldnt_copy_client_software_troubleshoot":"1.Configure Domain Settings(When Run As Console) / Logon Tab(When Run As Service) with Administrative Credentials<br/><br/>2.Admin share might not be enabled.<br/>3.Check the ADSelfServicePlus Client Sotware is exist.","month_dec":"December","ads_admin_product_settings_ha_slave_mssql_native_client_not_installed":"MS SQL Native Client is required in the standby server. Please install it and try again.","adssp_layout_admin_logon_settings_mobile_tab_photo_upload_size_exceeded":"Image size exceeds the allowed limit: 2MB. Please upload a smaller image.","adssp_admin_restrict_report_change_msg":"Report generation in progress. Press Ok to discard, or Cancel to stay on the current Page.","adssp_admin_configuration_tech_alert_change_role_message":"Change Role","adssp_admin_policies_policy_config_apc_reset_unlock_advisory":"Advisory","adssp_login_tfa_alert_saml_metadata_file_invalid_login_url":"Metadata has invalid login url","adssp_admin_policies_policy_config_apc_pwd_pol_max_pwd_len":"'- maximum password length up to '+val","ads_iamapps_config_alert_atleast_one_attrib_map":"Sorry! At least one attribute has to be mapped","adssp_configuration_gina_mac_error_login_screen_customization":"Operation failed while setting up dependencies","adssp_configuration_ppe_dict_empty":"Uploaded dictionary file is empty.","adssp_admin_customize_logon_drag_drop_enrollment":"User Registration","ads_iamapps_link_popup":"Username contains invalid characters. Please enter a valid username","adssp_admin_general_custom_disp_settgs_alert_access_control_invalid_ip_or_server_name":"Some Unique Address Fields have Invalid IP Address/Sever Name.It should not have more than one address.","adssp_admin_domain_settgs_enterdc":"Please enter the Domain Controller name","adssp_config_management_gina_custom_provide_bmp_file":"Please provide a BMP file for Icon.","adssp_js_calendar_prevMon":"Prev month (hold for menu)","adssp_admin_policies_scheduler_soon_to_expire_delivery_report_sub":"Delivery Report for Email Notifications","ads_admin_product_settings_ha_service_privilege_success":"User credentials for the ADSelfService Plus service updated successfully. Restart the service of both the primary and standby servers for the changes to take effect.","adssp_js_calendar_month_feb":"February","adssp_reports_common_text_none":"None","adssp_selfservice_gs_subscribe_processing":"Processing<blink>...<\/blink>","adssp_common_alert_select_computer":"Please select a computer.","ads_support_roboupdate_saved":"Saved successfully","NeedProperFile":"Please enter a proper file.","adssp_admin_server_settings_proxy_enter_valid_port":"Please Enter a valid Server Port","adssp_config_policy_config_advanced_alert_script_content_empty":"Please enter a valid script.","adssp_admin_config_pwd_sync_automatic_link_alert_office365":"User accounts will be automatically linked  if the usernames are the same in both AD and  Office365.","ads_admin_product_settings_ha_server_restart_success":"{0} is being restarted. Please check again in a few minutes.","first":"First","ads_iamapps_cert_gen_failed_contact_support":"Please contact support.","adssp_admin_gina_err_remote_connection_troubleshoot":"Initiating Connection to Remote Service . . .  Failed","adssp_domain_user_enrollment_enter_valid_code":"Please enter a valid code","ads_admin_product_settings_ha_not_supported_master":"{0} in the primary server does not support high availability due to version incompatibility.","ads_iamapps_config_alert_invalid_file_format":"Please make sure the image is in PNG, JPG, GIF, or JPEG file formats.","ads_saml_config_alert_valid_metadata_file_name":"Invalid characters found in the fileName. It should follow the regex pattern {0}.","adssp_admin_selfupdate_layout_positive_photo_size":"Enter a valid size","adssp_admin_server_settings_mail_enter_valid_modem_port":"Please Enter a valid Modem Port Number","adssp_config_gina_mac_err_couldnt_copy_install_sh":"Could not copy installMacAgent.sh","adssp_admin_policies_policy_config_alert_max":"Maximum {0} length cannot exceed 1000.","calendarCallBack":"No flatCallback given -- doing nothing.","ads_iamapps_config_alert_sp_small_logo_upload_dimensions_exceeded":"Small icon size exceeds","ads_iamapps_config_alert_sp_logo_upload_invalid_format":"Invalid icon. Please make sure the image is in PNG, JPG, GIF, or JPEG file formats.","selectDate":"Select Date","adssp_su_custom_field_mapped_in_empsearch":"Unable to delete. This attribute is used in employee search.","adssp_admin_policies_sulayout_enter_your_group_name":"Enter your group name","adssp_admin_server_settings_sms_enter_valid_http_header":"Enter valid HTTP Request Headers","adssp_config_gs_selected_groups":"Selected Groups","adssp_reset_unlock_accounts_username_alert_enter_name":"Please Enter the User Name","selectMailToRemove":"Select E-mail Address to Remove.","adssp_ok_button":"OK","adssp_admin_server_settings_mail_enter_valid_mail_content":"Enter valid Mail Content","adssp_configuration_ppe_enter_positive_number_for_num":"Please enter a value between 1 and 127 for the minimum number of numeric characters required.","adssp_domain_user_reset_qa_sel_ques_alert_sel_ques":"Please select a question.","adssp_configure_policy_config_apc_reset_unlock_limit_alert":"This option covers only reset password and unlock account actions carried out by users through ADSelfService Plus.","ads_admin_product_settings_ha_master_cluster_exists":"High availability setup already exists in the primary server.","adssp_admin_general_adsearch_emp_details":"Employee Details","adssp_common_text_enter_positive_no":"Enter the positive numbers.","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_comicsans":"Comic Sans MS","adssp_admin_general_adsearch_emp_info":"Employee Info","adssp_admin_license_management_restrict_users_deleted_users":"Deleted Users","adssp_admin_configuration_tech_alert_delete_message":"Delete","adssp_admin_server_settings_push_register_enter_valid_admin_mail_id":"Please enter an admin maild id","day_fri":"Fri","ads_iamapps_config_alert_cancel":"Cancel","ads_iamapps_config_alert_choose_p12_file":"Please choose a P12 key file","ads_iamapps_config_alert_select_host":"Select atleast one system","adssp_config_admin_tools_helpdesk_one_question_needed":"Unable to delete. At least one security question is required.","ads_support_roboupdate_alert_entries_notnull":"Mandatory fields cannot be left blank.","adssp_successfully_added":"Successfully Added","adssp_admin_customize_logon_drag_drop_unlock_acc":"Unlock Account","adssp_admin_selfupdate_layout_default_field_type":"Default Field Type","adssp_domain_user_cp_rp_pwd_strength_weak":"Weak","adssp_config_mfa_adsqa_quest_mapped_other_policies_confirm_edit_text":"This question is used in another self-service policy. Are you sure you want to edit the question?","adssp_configuration_task_scheduler_enter_enroll_ui_text":"null","adssp_common_text_popuptitle_add_ous_groups":"Add OUs/Groups","adssp_domain_user_my_info_num_alert":"'Enter only numbers in the \\\"'+labelName+'\\\" field.'","adssp_admin_customize_db_backup_schedule_pls_enter_storage_path":"Please enter back-up storage path","enterValue":"Please enter an value for ","adssp_domain_user_enrollment_part_enroll":"Complete your enrollment now to enjoy these benefits!","adssp_admin_logon_customize_dragndrop_htmlarea_fontname_trebuchet":"Trebuchet MS","adssp_config_management_custom_text_provide_button_text":"Please provide Button Text","adssp_su_custom_field_mapped_in_pswdsync":"Unable to delete. This attribute is being used for account linking in password synchronizer.","month_feb":"February","adssp_admin_restricted_unownedlicenses":"Unowned Licenses","adssp_export_settings_photo_upload_dimensions_exceeded":"The selected image exceeds the allowed dimensions limit. Please make sure the image is of dimensions: 200x50 pixels.","adssp_config_sulayout_manager_field_hint":"Distinguished Name (DN) of the manager should be given.","ads_iamapps_config_alert_invalid_host_display_name":"Invalid Display Name","ads_iamapps_config_alert_invalid_port":"The port you have specified is not a number","adssp_config_sulayout_mandatory_alert":"is a mandatory field. It cannot be left empty.","adssp_admin_policies_ste_cannot_del":"Cannot delete! At least one scheduler should remain.","ads_iamapps_custom_saml_both_sp_idp":"Both SP & IDP flow","ads_common_text_select_domain":"Please select a domain","adssp_configuration_policy_config_advanced_identity_mandatory":"Mandatory","adssp_admin_gina_err_fatal_error":"Fatal error occured.","adssp_common_invalid_chars_in_file_path":"Invalid characters in File Path,Please avoid using / : * ? \\ < > | \\\\\\\" in File Name","adssp_admin_policies_scheduler_soon_to_expire_msg_first_templete":"Dear %userName%,\\n\\nYour password will expire on %dateTime%. So, please change your domain password as soon as possible.\\n\\nThank you.\\n\\nRegards\\nAdministrator","adssp_config_sulayout_multi_option_field_hint":"Double quotes will be skipped for the values in Radio button,Drop Down Box and Check Box.","admin_policy_alert_enter_policy_name":"Enter a Policy Name","adssp_admin_policies_policy_config_alert_min_max_not_match_ans":"The minimum & maximum number of characters should not be same for users\u2019 answer(s).","adssp_admin_policies_scheduler_soon_to_expire_start_notify_days_before":"Notify users during the last {0} days before password/account expiry.","ads_iamapps_custom_saml_alert_some_fields_left_blank":"Please select a category for this app.","adssp_configure_policy_config_apc_reset_limit_alert":"This option covers only reset password actions carried out by users through ADSelfService Plus.","adssp_common_text_less":"less","tuesday":"Tuesday","adssp_admin_gina_no_file":"The system cannot find the file specified","adssp_domain_user_reset_vc_enter_ver_code":"Enter the Verification Code.","adssp_admin_policyConfig_thirdStep_mandat_ques_more_than_random_ques":"You are trying to force more questions than you opted to show random number of question.","ads_admin_product_settings_ha_virtual_master_same":"The virtual host name cannot be the same as the primary server.","adssp_policy_config_apc_notify_admin_password_content_alert":"Mail content should not contain %password% macro","adssp_admin_server_settings_modem_enter_valid_msg_center":"Please Enter a valid Messege Center Number","adssp_admin_gina_couldnt_copy_client_software":"Couldn't copy ADSelfServicePlusClientSoftware.msi","adssp_configuration_sulayout_initial_value_max_char":"Initial Value should be less than maximum Char length"});
+        var isOtherLoginAttrEnabled = "true";
+		var captchaImgURL = 'static\x2Fhip.jpg\x3FisLoginPage\x3Dtrue\x26t\x3D97';
+		var loginStatus = '';
+
+        flatThemeJquery('[data-toggle="tooltip"]').tooltip(); //No I18N
+        function smartCardLogin(loginType)
+        {
+            $("#smart-card").css("pointer-events", "none"); //No I18N
+            flatThemeJquery('form[name="loginSmartCard'+loginType+'"]').trigger('submit');//No I18N
+        }
+	
+        function initSAMLLoginRequest(idpLoginUrl, reqMethod)	 
+        {	 
+            if (reqMethod == 'GET')
+            {
+                window.top.location.replace(idpLoginUrl);	 
+            }
+            else if (reqMethod == 'POST')
+            {
+                var splitUrl = idpLoginUrl.split("?");
+                var loginUrl = splitUrl[0];
+                var reqParams = splitUrl[1];
+                CreateAndSubmitForm(loginUrl,window.name,reqParams);
+            }
+        }
+
+		function addTitleForSelectPicker(id)
+		{
+			var title = [];
+			$('#'+id+' option').each(function(){	//NO I18N
+			 var encodedStr = $(this).attr('title');//NO I18N
+		   	 title.push($('<div>' + encodedStr + '</div>').text());	//NO I18N
+			});
+			$("#"+id).parent().children("div").children("ul").children("li").each(function(i){	//NO I18N
+			  $(this).children("a").attr('title',title[i]);	//NO I18N
+			});
+        }
+
+        function showPasswordLogin(form, defPassVal)
+        {
+            togglePasswordField(form, true, defPassVal, "Password");
+        }
+
+		function showUserNameField(form, defPassVal)
+        {
+			toggleUsernameField(form, true, defPassVal, "Username");
+        }
+
+		function getUserNameField(defaultVal, placeholder)
+        {
+           return '<li><input name="j_username" type="text" id="j_username" value="'+defaultVal+'" placeholder="'+placeholder+'" class="linput" autocomplete="off" onkeypress="javascript:onKeyPressEvent(event, document.SSPLogin)" onkeyup="javascript:onKeyUpEvent(event, document.SSPLogin)" onpaste="javascript:onPasteEvent(this,document.SSPLogin)" maxlength="255"/><span class="add-on form-icn-user" style="cursor:text"></span></li>';
+        }
+    </script>
+
+    
+    
+
+    <script language=JavaScript src="/js/common/LanguageList.js?build=6303" ></script>
+
+    
+    
 </head>
-<body>
-    <iframe src="https://giphy.com/embed/9WC8WTZsFxkRi" width="480" height="360" frameborder="0" class="giphy-embed" allowfullscreen></iframe><p><a href="https://giphy.com/gifs/hack-9WC8WTZsFxkRi">via GIPHY</a></p>
-    <div class="content">
-        <h1>Welcome to My Website</h1>
-        <p>This is some content on the page.</p>
+
+<style>
+.loginBgImageClass
+{
+	background:url('images\2f ssp\2d login\2d page\2e png') no-repeat fixed;
+	background-size: cover;
+}
+</style>
+
+<body onload="javascript:runonLoad();createSearch('AnonymousAccess');validateLoginPage('init');showErrorOnLoadPage();" class="ssp-login-bg-SPK loginBgImageClass ssp_theme_custom " onclick="hideOnBlur(event, 'DOWN_ARROW', 'SEARCH_CRI')">
+
+    <div class="mini-status-alert status-alert status-alert-danger status-has-parent status-alert-xmd alert-dismissible ssp-display-none" role="alert" id="fTLoginAlert">
+        <button type="button" class="close"><span aria-hidden="true">&times;</span></button> 
+        <div class="ssp-text-color-default ssp-align-center text-md"><i class="ssp-inline-icon icn-cross ssp-mt-m2"></i><span id="fTLoginAlertText"></span></div>
     </div>
+	
+	</tr>
+	</table>
+    <div class="ssp-login-container">
+        <div class="login-logo">
+            <div class="product-logo">
+                <img src="images&#x2f;logos&#x2f;customLogo.png" alt="ADSelfService Plus" style="width:120px;height:50px" >
+            </div>
+        </div>
+
+		<div id="IframeLoadingStatus" style="position:fixed;z-index:500; left:45%; top:40%;background:white;display:none" >
+			<table cellspacing="0" cellpadding="5" border="0" class="sucessMsg" align="center" style="background:  rgb(242,242,242);border-color:#FFF; padding:5px 10px;">
+				<tr>
+					<td><img src="/webclient/images/loader-sm.gif" > Loading... </td>
+				</tr>
+			</table>
+		</div>
+        <div class="login-inner-wrapper" id="freeToolLoginDiv">
+			
+				
+			
+            <form name="SSPLogin" method="POST" onSubmit="return checkForNull(document.SSPLogin, true);" action="j_security_check">
+                <div class="login-wrap user-login-form   open">
+                    <div class="login-header">
+                        <i class="ssp-icon icn-login-user"></i>
+                        <span style="width:350px;text-overflow: ellipsis;overflow: hidden;white-space:nowrap;display:inline-block;">Sign In</span>
+                        <div class="login-caret"></div>
+                    </div>
+					
+					<!--test-->
+					
+				 <ul class="">
+                    <li class="login-user-info hide">
+                       <div class="row">
+                           <div class="col-md-12">
+                            <span class="pull-left">
+                                <label><em>Hello</em>&nbsp;<span id="username"></span>,&nbsp;<em>enter your password to login</em></label>
+                            </span>
+							<a id="editUsername" onclick="editUsername(document.SSPLogin)" style="cursor:pointer;" class="pull-right hide">
+                                Change
+                            </a>
+                            <div class="clearfix"></div>
+                           </div>
+                       </div>
+                    </li>
+                    <li class="relative UseRName" >
+                        <input name="j_username" type="text" id="j_username" value="" placeholder="Username" class="linput" autocomplete="off" onkeypress="javascript:onKeyPressEvent(event, document.SSPLogin)" onkeyup="javascript:onKeyUpEvent(event, document.SSPLogin)" onpaste="javascript:onPasteEvent(this,document.SSPLogin)" maxlength="255"/>
+						<span class="add-on form-icn-user"></span>
+					</li>	
+
+					
+                        <li class="ssp-make-relative PsSwrD form-input-with-icon">
+                            <input name="j_password" type="password" maxlength="256" id="j_password" value="" placeholder="Password" class="linput" autocomplete="off"/>
+                            <span class="add-on form-icn-password " style="cursor:text"></span>
+                            <span class="add-on form-icn-eye open hide"></span>
+                        </li>
+                    
+
+					<div id="LOGIN_DOMAIN_DROPDOWN">
+                        
+						</div>
+						
+					<!-- <input type="hidden" name="domainAuthen" value="true"> -->
+
+						
+						
+						
+						
+				     <li class="btn-login">
+                            <input id="loginButton" type="submit" onclick="return validateLoginPage('submit')" class="btn btn-primary" style="cursor:pointer;" value="Login">
+                            <span class="ssp-ml-10" id="progress_SSPLogin" style="display: none;">
+                                <img class="ssp-mr-5" src="webclient/images/circle-dotted-loader.gif" />
+                            </span>
+							<span class="login-rolling-loader pull-left hide">
+                               <img src="./images/Rolling.gif" class="">
+                            </span>
+                            
+							<div class="clearfix"></div>
+                     </li>	
+
+                     <li id="PRIMARY_AUTHS" class="row">
+						
+                            
+
+							
+                        </li>
+                    </ul>
+                    <input type="hidden" name="AUTHRULE_NAME" value="ADAuthenticator">
+
+                    
+                    <input type="hidden" id="captchaPage" value="Login">
+                </div>
+				
+            </form>
+            
+			
+            <form name="RPForm" method="POST" onSubmit="return validateSelfServiceForm(document.RPForm)" action="ServletAPI/accounts/selfservice?isFromEndUserPage=true&OPERATION=reset">
+                <div class="login-wrap ">
+                    <div class="login-header">
+                        <i class="ssp-icon icn-login-password"></i>
+						<span style="width:350px;text-overflow: ellipsis;overflow: hidden;white-space:nowrap;display:inline-block;">Forgot your password?</span>
+                        <div class="login-caret"></div>
+                    </div>
+                    <ul>
+                        <li>
+                            <input type="text" name="DOMAIN_USER_NAME" placeholder="Username" onkeypress="javascript:onKeyPressEvent(event, document.RPForm)" onkeyup="javascript:onKeyUpEvent(event, document.RPForm)" onpaste="javascript:onPasteEvent(this,document.RPForm)" class="linput" maxlength="255" autocomplete="off"/>
+                            <span class="add-on form-icn-user"></span>
+                        </li>
+                        
+                                <script type="text/javascript">
+                                    hideCap = 0;
+                                </script>
+                        
+                        <li>
+                            
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+
+<style type="text/css">
+	.refresh1:hover, .refresh1:focus {
+	    background: url(../images/png-total-img.png) no-repeat;
+	    background-position: -426px -96px;
+	    width: 16px;
+	    height: 16px;
+	}	
+
+	.audio1:hover, .audio1:focus {
+	    background: url(../images/png-total-img.png) no-repeat;
+	    background-position: -426px -112px;
+	    width: 16px;
+	    height: 16px;
+	}
+</style>
+
+<script language="JavaScript" src="/js/validation.js?build=6303"></script>
+<script type="text/javascript" language=JavaScript src="/js/audioCaptcha.js?build=6303"></script>
+
+<script>
+	function runonLoad()
+	{
+		try 
+		{
+		    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+		    window.audioContext = new window.AudioContext();
+		}
+		catch (e) 
+		{
+		    
+		}
+	}
+
+	function play(value, th)
+	{
+		if(hideCap == 0)
+		{
+			if(th != null && th != 'undefined')
+			{
+				flatThemeJquery(th).closest('.captcha-container').find('input[type=text]').trigger('focus'); //No I18N
+			}
+
+			if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1)
+			{
+				var backgroundMusic;
+				var audio = "static/audio.wav?t=";
+				backgroundMusic = new AudioCaptchaAudio(audio, function() {
+					if(value=="start")
+					{
+						backgroundMusic.setVolume(100);
+						backgroundMusic.play();
+
+						setTimeout(function(){
+					        backgroundMusic.disconnectSrc();
+					    }, 3500);
+					}
+				});
+				
+				backgroundMusic.setVolume(0);backgroundMusic.play();
+				
+				if(value=="start")
+				{
+					disableButtons(3200, th);
+				}
+			}
+			else if(value == 'start')
+			{
+				playCaptcha(th);
+			}
+		}
+	}
+
+	function validateCaptcha(th)
+	{
+		var captcha = flatThemeJquery(th).find('input[type=text]').val();
+		if(captcha == '' || captcha == "Case-Insensitive")
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	//Reloading the captcha img 
+	//without refreshing the whole page
+	function reloadCaptcha(th)
+	{
+		if(hideCap == 0)
+		{
+			if(th != null && th != 'undefined')
+			{
+				flatThemeJquery(th).closest('.captcha-container').find('input[type=text]').trigger('focus'); //No I18N
+			}
+
+			var da = new Date();
+			var captchaContainer = flatThemeJquery(th).closest('.captcha-container'); //No I18N
+
+			captchaContainer.find('input[type=text]').val('');	//No I18N
+
+			var captchaImageSource = captchaContainer.find('img').prop('src');	// NO I18N
+			if(typeof captchaImgURL !== 'undefined' && captchaImgURL.length)
+			{
+				captchaImageSource = captchaImgURL;
+			}
+
+			captchaContainer.find('img').prop('src', captchaImageSource + da.getMilliseconds());	//No I18N
+
+			if(!!document.documentMode)	// IE
+			{
+				captchaContainer.find('bgsound').prop('src', '');	//No I18N
+			}
+			else
+			{
+			captchaContainer.find('audio').prop('src', '');	//No I18N
+			}
+
+			play('initial');//No I18N
+		}
+	}
+
+	function disableButtons(val, th)
+	{
+		flatThemeJquery(th).closest('.captcha-container').find('.refreshButton,.playButton').css({'pointer-events': 'none'}); //No I18N
+	    
+	    setTimeout(function(){
+			flatThemeJquery(th).closest('.captcha-container').find('.refreshButton,.playButton').css({'pointer-events': 'auto'}); //No I18N
+	    }, val);
+	}
+
+	function playCaptcha(th)
+	{
+		if(hideCap == 0)
+		{   
+			var div = flatThemeJquery(th).closest('.captcha-container'); //No I18N
+			var date = new Date();
+			var isIE = false || !!document.documentMode;
+			var isEdge = !isIE && !!window.StyleMedia;
+			
+			if(isIE)
+			{
+				div.find('bgsound').prop('src', "static/audio.wav?t="+date.getMilliseconds());
+			}
+			else
+			{
+				div.find('audio').prop('src', "static/audio.wav?t="+date.getMilliseconds());
+				div.find('audio')[0].playbackRate ='0.9';
+				div.find('audio')[0].play();
+			}
+		}
+
+		disableButtons(3200, th);
+	}
+	//Ending
+</script>
+
+
+<div class="captcha captcha-container ssp-mt-15 ssp-pb-15" style="border-bottom: 1px solid #ededed;">
+	<bgsound name="ieAudio"/>	
+	<audio name="nonIe" type="audio/wav" src=""></audio>	
+	<div class="row">
+		<div class="col-md-6">
+			<img height="36" align="center" src="" name="hipImg" style="overflow:hidden;">
+		</div>
+		<div class="col-md-6 ssp-pl-0">
+			<div class="input-group fluid-width captcha-input ssp-mt-10">
+				<input type="text" value="" name="DIGEST" name="captchaVal"  class="form-control" autocomplete="off" maxlength="6" placeholder="Type the Captcha"/>
+		        <div class="input-actions">
+		            <div class="input-addon last">
+						<a href="JavaScript:void(0)" class="ssp-inline-icon icn-captcha-refresh ssp-mt-m4" data-toggle='tooltip' data-placement='bottom' title="Refresh Captcha" alt="Refresh the verification code" onclick="reloadCaptcha(this)" onkeydown="if(event.keyCode==13){reloadCaptcha(this); return false;}"></a>
+		            </div>
+		            
+		        </div>
+		    </div>
+		</div>
+	</div>
+</div>
+
+
+                        </li>
+                        
+                        <li class="btn-login">
+                            <input type="submit" class="btn btn-primary" value="Continue" />
+                            <span class="ssp-ml-10" id="progress_RPForm" style="display: none;">
+                                <img class="ssp-mr-5" src="webclient/images/circle-dotted-loader.gif" />
+                                <span class="ssp-dull-text-1">
+                                    Please wait.
+                                </span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </form>			
+
+			
+			
+            <form name="UAForm" method="POST" onSubmit="return validateSelfServiceForm(document.UAForm)" action="ServletAPI/accounts/selfservice?isFromEndUserPage=true&OPERATION=unlock">
+                <div class="login-wrap ">
+                    <div class="login-header">
+                        <i class="ssp-icon icn-login-locked"></i>
+                        <span style="width:350px;text-overflow: ellipsis;overflow: hidden;white-space:nowrap;display:inline-block;">Account locked out?</span>
+                        <div class="login-caret"></div>
+                    </div>
+                    <ul class="">
+                        <li>
+                            <input type="text" name="DOMAIN_USER_NAME" placeholder="Username" onkeypress="javascript:onKeyPressEvent(event, document.UAForm)" onkeyup="javascript:onKeyUpEvent(event, document.UAForm)" onpaste="javascript:onPasteEvent(this,document.UAForm)" class="linput" maxlength="255" autocomplete="off"/>
+                            <span class="add-on form-icn-user"></span>
+                        </li>
+                        
+                        <li>
+                            
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+
+<style type="text/css">
+	.refresh1:hover, .refresh1:focus {
+	    background: url(../images/png-total-img.png) no-repeat;
+	    background-position: -426px -96px;
+	    width: 16px;
+	    height: 16px;
+	}	
+
+	.audio1:hover, .audio1:focus {
+	    background: url(../images/png-total-img.png) no-repeat;
+	    background-position: -426px -112px;
+	    width: 16px;
+	    height: 16px;
+	}
+</style>
+
+<script language="JavaScript" src="/js/validation.js?build=6303"></script>
+<script type="text/javascript" language=JavaScript src="/js/audioCaptcha.js?build=6303"></script>
+
+<script>
+	function runonLoad()
+	{
+		try 
+		{
+		    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+		    window.audioContext = new window.AudioContext();
+		}
+		catch (e) 
+		{
+		    
+		}
+	}
+
+	function play(value, th)
+	{
+		if(hideCap == 0)
+		{
+			if(th != null && th != 'undefined')
+			{
+				flatThemeJquery(th).closest('.captcha-container').find('input[type=text]').trigger('focus'); //No I18N
+			}
+
+			if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1)
+			{
+				var backgroundMusic;
+				var audio = "static/audio.wav?t=";
+				backgroundMusic = new AudioCaptchaAudio(audio, function() {
+					if(value=="start")
+					{
+						backgroundMusic.setVolume(100);
+						backgroundMusic.play();
+
+						setTimeout(function(){
+					        backgroundMusic.disconnectSrc();
+					    }, 3500);
+					}
+				});
+				
+				backgroundMusic.setVolume(0);backgroundMusic.play();
+				
+				if(value=="start")
+				{
+					disableButtons(3200, th);
+				}
+			}
+			else if(value == 'start')
+			{
+				playCaptcha(th);
+			}
+		}
+	}
+
+	function validateCaptcha(th)
+	{
+		var captcha = flatThemeJquery(th).find('input[type=text]').val();
+		if(captcha == '' || captcha == "Case-Insensitive")
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	//Reloading the captcha img 
+	//without refreshing the whole page
+	function reloadCaptcha(th)
+	{
+		if(hideCap == 0)
+		{
+			if(th != null && th != 'undefined')
+			{
+				flatThemeJquery(th).closest('.captcha-container').find('input[type=text]').trigger('focus'); //No I18N
+			}
+
+			var da = new Date();
+			var captchaContainer = flatThemeJquery(th).closest('.captcha-container'); //No I18N
+
+			captchaContainer.find('input[type=text]').val('');	//No I18N
+
+			var captchaImageSource = captchaContainer.find('img').prop('src');	// NO I18N
+			if(typeof captchaImgURL !== 'undefined' && captchaImgURL.length)
+			{
+				captchaImageSource = captchaImgURL;
+			}
+
+			captchaContainer.find('img').prop('src', captchaImageSource + da.getMilliseconds());	//No I18N
+
+			if(!!document.documentMode)	// IE
+			{
+				captchaContainer.find('bgsound').prop('src', '');	//No I18N
+			}
+			else
+			{
+			captchaContainer.find('audio').prop('src', '');	//No I18N
+			}
+
+			play('initial');//No I18N
+		}
+	}
+
+	function disableButtons(val, th)
+	{
+		flatThemeJquery(th).closest('.captcha-container').find('.refreshButton,.playButton').css({'pointer-events': 'none'}); //No I18N
+	    
+	    setTimeout(function(){
+			flatThemeJquery(th).closest('.captcha-container').find('.refreshButton,.playButton').css({'pointer-events': 'auto'}); //No I18N
+	    }, val);
+	}
+
+	function playCaptcha(th)
+	{
+		if(hideCap == 0)
+		{   
+			var div = flatThemeJquery(th).closest('.captcha-container'); //No I18N
+			var date = new Date();
+			var isIE = false || !!document.documentMode;
+			var isEdge = !isIE && !!window.StyleMedia;
+			
+			if(isIE)
+			{
+				div.find('bgsound').prop('src', "static/audio.wav?t="+date.getMilliseconds());
+			}
+			else
+			{
+				div.find('audio').prop('src', "static/audio.wav?t="+date.getMilliseconds());
+				div.find('audio')[0].playbackRate ='0.9';
+				div.find('audio')[0].play();
+			}
+		}
+
+		disableButtons(3200, th);
+	}
+	//Ending
+</script>
+
+
+<div class="captcha captcha-container ssp-mt-15 ssp-pb-15" style="border-bottom: 1px solid #ededed;">
+	<bgsound name="ieAudio"/>	
+	<audio name="nonIe" type="audio/wav" src=""></audio>	
+	<div class="row">
+		<div class="col-md-6">
+			<img height="36" align="center" src="" name="hipImg" style="overflow:hidden;">
+		</div>
+		<div class="col-md-6 ssp-pl-0">
+			<div class="input-group fluid-width captcha-input ssp-mt-10">
+				<input type="text" value="" name="DIGEST" name="captchaVal"  class="form-control" autocomplete="off" maxlength="6" placeholder="Type the Captcha"/>
+		        <div class="input-actions">
+		            <div class="input-addon last">
+						<a href="JavaScript:void(0)" class="ssp-inline-icon icn-captcha-refresh ssp-mt-m4" data-toggle='tooltip' data-placement='bottom' title="Refresh Captcha" alt="Refresh the verification code" onclick="reloadCaptcha(this)" onkeydown="if(event.keyCode==13){reloadCaptcha(this); return false;}"></a>
+		            </div>
+		            
+		        </div>
+		    </div>
+		</div>
+	</div>
+</div>
+
+
+                        </li>
+                        
+                        <li class="btn-login">
+                            <input type="submit" class="btn btn-primary" value="Continue" />
+                            <span class="ssp-ml-10" id="progress_UAForm" style="display: none;">
+                                <img class="ssp-mr-5" src="webclient/images/circle-dotted-loader.gif" />
+                                <span class="ssp-dull-text-1">
+                                    Please wait.
+                                </span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+            			
+
+			
+        </div>
+    </div>
+<!--
+	<div class="ssp-login-lhs open">
+        <div class="toggle-btn"></div>
+        <div class="ssp-login-lhs-inner ssp-custom-scroll-hover" data-theme="dark" data-scrollbar-position="outside">
+            <h3>Help</h3>
+            <p>Please use 0 days to notify users when their. %dateTime% - use this macro to insert the date. use this macro to insert the number of days left. %dateTime% - use this macro to insert the date. Please use 0 days to notify users when their.</p>
+            <p>%dateTime% - use this macro to insert the date. use this macro to insert the number of days left.</p>
+            <p>%dateTime% - use this macro to insert the date. Please use 0 days to notify users when their. %dateTime% - use this macro to insert the date. use this macro to insert the number of days left. %dateTime% - use this macro to insert the date. Please use 0 days to notify users when their. %dateTime% - use this macro to insert the date.</p>
+            <p>use this macro to insert the number of days left. %dateTime% - use this macro to insert the date. Please use 0 days to notify users when their. %dateTime% - use this macro to insert the date. use this macro to insert the number of days left.</p>
+            <p>%dateTime% - use this macro to insert the date.</p>
+        </div>
+    </div>
+-->
+    <div class="ssp-login-promo-footer">
+    
+        <span id="LANG_CONTAINER" class="language-container CSTopMenuButtonColor">
+            
+
+
+
+
+
+
+
+    <select id="localeId" name="localeId" onchange="javascript:changeLanguage()" class="selectpicker" data-width="100%">
+
+            <option id="--_--" value="--_--" title="Browser Default" >
+                Browser Default
+            </option>
+    
+            <option id="en_US" value="en_US" title="English" selected>
+                English
+            </option>
+    
+            <option id="ja_JP" value="ja_JP" title="Japanese" >
+                Japanese
+            </option>
+    
+            <option id="zh_CN" value="zh_CN" title="Chinese" >
+                Chinese
+            </option>
+    
+            <option id="es_MX" value="es_MX" title="Spanish" >
+                Spanish
+            </option>
+    
+            <option id="de_DE" value="de_DE" title="German" >
+                German
+            </option>
+    
+            <option id="pl_PL" value="pl_PL" title="Polish" >
+                Polish
+            </option>
+    
+            <option id="pt_BR" value="pt_BR" title="Brazilian Portugese" >
+                Brazilian Portugese
+            </option>
+    
+            <option id="fr_FR" value="fr_FR" title="French" >
+                French
+            </option>
+    
+            <option id="tr_TR" value="tr_TR" title="Turkish" >
+                Turkish
+            </option>
+    
+            <option id="da_DK" value="da_DK" title="Danish" >
+                Danish
+            </option>
+    
+            <option id="it_IT" value="it_IT" title="Italian" >
+                Italian
+            </option>
+    
+            <option id="sv_SE" value="sv_SE" title="Swedish" >
+                Swedish
+            </option>
+    
+            <option id="nb_NO" value="nb_NO" title="Norwegian" >
+                Norwegian
+            </option>
+    
+            <option id="nl_NL" value="nl_NL" title="Dutch" >
+                Dutch
+            </option>
+    
+            <option id="ar_EG" value="ar_EG" title="Arabic" >
+                Arabic
+            </option>
+    
+            <option id="fr_CA" value="fr_CA" title="Canadian French" >
+                Canadian French
+            </option>
+    
+            <option id="ru_RU" value="ru_RU" title="Russian" >
+                Russian
+            </option>
+    
+            <option id="en_GB" value="en_GB" title="British English" >
+                British English
+            </option>
+    
+            <option id="iw_IL" value="iw_IL" title="Hebrew" >
+                Hebrew
+            </option>
+    
+            <option id="fi_FI" value="fi_FI" title="Finnish" >
+                Finnish
+            </option>
+    
+            <option id="ko_KR" value="ko_KR" title="Korean" >
+                Korean
+            </option>
+    
+            <option id="zh_TW" value="zh_TW" title="Chinese Traditional" >
+                Chinese Traditional
+            </option>
+    
+
+        </select>
+
+
+
+        </span>
+    
+    
+    </div>
+    
+<script language="Javascript" src="adsf/js/common/Cookies.js?bN=MEONEFW_5144" type="text/javascript"></script><script>window.csrfCookieName="adscsrf";
+window.csrfParamName="adscsrf";</script><div style="display:none" id="csrfDiv"><input type="hidden" id="adscsrfFromCookie" name="adscsrfFromCookie" value="b783a04d-77ce-4715-ae52-050de11f53af"/></div><script>//function to check whether all the forms in a page has csrf field
+function isCSRFNotPresent() {
+var formsCount=document.getElementsByTagName("form").length;
+if(formsCount>0){
+var formLists=document.getElementsByTagName("form");
+for(i=0;i<formLists.length;i++){
+if(formLists[i][window.csrfParamName] == undefined){
+return true;
+}
+}
+}
+return false;
+}
+//function to append csrf field to all the forms in a page
+function appendCsrf() 
+{
+var formsCount=document.getElementsByTagName("form").length;
+if(formsCount>0){
+var formLists=document.getElementsByTagName("form");
+for(i=0;i<formLists.length;i++){
+if(formLists[i][window.csrfParamName] == undefined){
+var x = document.getElementById("adscsrfFromCookie").cloneNode(true); // No I18N
+x.id = window.csrfParamName;
+x.name = window.csrfParamName;
+formLists[i].appendChild(x);
+//console.log("adding csrf hidden param to the url -> "+formLists[i].action+" form name is "+formLists[i].name+" id is "+formLists[i].id);
+}
+if(formLists[i][window.csrfParamName].value=="")
+{
+formLists[i][window.csrfParamName].value=document.getElementById("adscsrfFromCookie").value; // No I18N
+}
+formLists[i].autocomplete="off";
+}
+}
+if(isCSRFNotPresent())
+appendCsrf();
+}
+appendCsrf();
+adsjQuery(document).ready(function(){
+appendCsrf();
+});</script>
 </body>
 </html>
+
+<script type="text/javascript">
+    var statusMsg ='';	
+    var isDomainChanged = false;
+	var isProcessing = false;
+	var isDomainUserAccess = true;
+
+    if(flatThemeJquery('.login-wrap.open').closest('form').attr('name') != 'SSPLogin')
+    {
+        flatThemeJquery('.login-wrap.open').css({"height":"212px"});// No I18N
+    }
+    
+    flatThemeJquery(document).ready(function() {
+		
+		setDirSearchBox();
+		
+        flatThemeJquery(".status-alert .close").on("click", function(e) { // No I18N
+            flatThemeJquery(this).closest("div.status-alert").slideUp("slow"); // No I18N
+        });
+
+        flatThemeJquery(".login-wrap").on("click", function(e) { // No I18N
+            var flatThemeJquerythis=this;
+            if (!flatThemeJquery(this).hasClass("open") && !isProcessing) { // No I18N
+				isProcessing = true;
+                flatThemeJquery(".login-wrap.open").animate({"height":"44px"}, 400, function(){ // No I18N
+                    flatThemeJquery(this).removeClass('open');// No I18N
+
+                    if(flatThemeJquery(flatThemeJquerythis).find('input[name="DIGEST"]').length > 0)
+                    {
+                        reloadCaptcha(flatThemeJquery(flatThemeJquerythis).find('.captcha-container')[0]);
+                    }
+                        
+                    if(!flatThemeJquery(flatThemeJquerythis).hasClass("user-login-form"))
+                    {
+                        flatThemeJquery(flatThemeJquerythis).animate({"height":"212px"},400).addClass('open'); // No I18N
+                    }
+                    else
+                    {
+                         if(document.getElementById("j_password")==undefined)
+						 {
+						  flatThemeJquery(flatThemeJquerythis).animate({"height":"166px"},400).addClass('open'); // No I18N
+						 }
+						 else
+						 {
+                          flatThemeJquery(flatThemeJquerythis).animate({"height":"198px"},400).addClass('open'); // No I18N
+						 }
+                    }
+
+					isProcessing = false;
+                });
+            }
+        });
+
+        var opt = {
+            controls: false,
+            auto: true
+        };
+
+        flatThemeJquery(".toggle-btn").on("click",function(){ // No I18N
+            if(flatThemeJquery(this).closest('.ssp-login-lhs').hasClass('open')){
+                flatThemeJquery(".ssp-login-lhs").animate({"left":"-324px"},500,function(){ // No I18N
+                    flatThemeJquery(this).removeClass('open'); // No I18N
+                })
+            }
+            else{
+                flatThemeJquery(".ssp-login-lhs").addClass('open').animate({"left":"0"},500,function(){ // No I18N
+                });
+            }
+        });
+
+        flatThemeJquery(".ssp-custom-scroll-hover").each(function() { // No I18N
+            if (flatThemeJquery(this).attr('data-height')) { // No I18N
+                flatThemeJquery(this).height(flatThemeJquery(this).attr('data-height')).css({ // No I18N
+                    "overflow": "hidden" // No I18N
+                });
+            }
+
+            var theme = (flatThemeJquery(this).attr("data-theme")) ? flatThemeJquery(this).attr("data-theme") : "light"; // No I18N
+            var sPosition = (flatThemeJquery(this).attr("data-scrollbar-position")) ? flatThemeJquery(this).attr("data-scrollbar-position") : "inside"; // No I18N
+
+            flatThemeJquery(this).mCustomScrollbar({
+                theme: theme,
+                autoHideScrollbar: true,
+                scrollbarPosition: sPosition,
+                scrollEasing:"linear",//NO I18N
+                scrollInertia:60,
+                mouseWheelPixels: 70,
+                live:true,
+                callbacks: {
+                    onScroll: function(evt) {
+                        return false;
+                    },
+                    onTotalScroll: function(evt) {
+                        return false;
+                    },
+                    onTotalScrollBack: function(evt) {
+                        return false;
+                    }
+                }
+            });
+        });
+
+        flatThemeJquery('#j_username').on('focusout', function(){// NO I18N
+            flatThemeJquery('#j_password').removeAttr('style');// NO I18N
+
+            var isDomainSelectionDisabled = document.getElementById("domainName")!=null ? document.getElementById("domainName").disabled : true;
+            if(!isDomainChanged && !isDomainUserAccess && !isDomainSelectionDisabled)
+            {
+                var enteredVal = flatThemeJquery(this).val();
+
+                if(typeof enteredVal !== undefined && enteredVal.trim().length > 0 && enteredVal.trim().toLowerCase() !== 'admin')
+                {
+                    var domainSelect = flatThemeJquery('select[id="domainName"]');// NO I18N
+                    if(domainSelect.length > 0 && domainSelect.find('option').length > 1)
+                    {
+                        domainSelect.val(flatThemeJquery(domainSelect.find('option')[0+1]).attr('value')).selectpicker('refresh');// NO I18N
+                    }
+
+                    isDomainChanged = true;
+                }
+            }
+        });
+
+        flatThemeJquery('select[id="domainName"]').on('changed.bs.select', function(){// NO I18N
+                isDomainChanged = true;
+        });
+    });
+
+    function validateCaptchaFT(th)
+    {
+        var captcha = th.getElementsByTagName('input')[th.getElementsByTagName('input').length-1].value;
+        if(captcha == '' || captcha == "Case-Insensitive")
+        {
+            flatThemeJquery("#fTLoginAlertText").text("Please enter the exact characters as found in the image.");   //No I18N
+            flatThemeJquery("#fTLoginAlert").delay(500).slideDown('slow') //No I18N
+            return false;
+        }
+        return true;
+    }
+
+	function showErrorOnLoadPage()
+	{
+			if(loginStatus !=null && loginStatus!='')
+			{
+				adsjQuery("#fTLoginAlertText",document).html(loginStatus);	//No I18N
+				adsjQuery("#fTLoginAlert",document).delay(500).slideDown('slow') //No I18N
+			}
+	}
+</script>
+		
+					<script>
+						$('#IframeLoadingStatus').hide();
+						$('#freeToolLoginDiv').css('opacity',1);//NO I18N
+					</script>		
+		
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<link REL="SHORTCUT ICON" HREF='&#x2f;images&#x2f;logos&#x2f;ADSSPDesktop.ico'>
+<title>My Account</title>
+<script language="JavaScript" src="/js/form-util.js?build=6303"></script>
+<script language="JavaScript" src="/js/CommonUtil.js?build=6303"></script>
+<script>
+
+var jQueryLoaded = jQueryLoaded || false;
+if(!jQueryLoaded)
+{
+	var script = document.createElement( 'script' );
+	script.type = 'text/javascript';
+	script.src = "/webclient/vendor/js/jquery.js?build=6303";
+	if((window.name != "advancedPC_Frames") && (window.name != "advancedIDV_Frames")) //handled to avoid jquery-ui conflict, need to remove this check in future release
+	{
+		document.getElementsByTagName('head')[0].appendChild( script );
+	}
+
+	jQueryLoaded = true;
+
+
+	var fileNamePattern = '^[a-zA-Z0-9.\\-_ ]{0,255}$';
+	
+	addEvent(window, 'load', setFileConstraints, false); //NO I18N
+
+	function addEvent(element, eventString, functionReference, useCapture){
+		if (element.addEventListener) {
+		  element.addEventListener(eventString, functionReference, useCapture);
+		}
+		else if (element.attachEvent) {
+		  element.attachEvent('on'+eventString , functionReference );
+		}
+	}
+
+	function setFileConstraints()
+	{
+	try{
+		if(fileNamePattern != ''){
+			var tip = 'Filename should follow the regex pattern {0}'.replace('{0}', fileNamePattern);
+			var errorMsg = 'Invalid characters found in the file name. It should follow the regex pattern {0}'.replace('{0}', fileNamePattern);
+			var elements = document.getElementsByTagName('input');
+			for(i in elements){
+				var element = elements[i];
+				var elementType = element.type;
+				if(elementType == 'file' && element.getAttribute('patternText') == null){
+					element.setAttribute('patternText', fileNamePattern);
+					if(typeof setADSTooltip == 'function'){
+					setADSTooltip(element, tip);
+					}
+					else{
+						element.title = tip;
+					}
+
+					addEvent(element, 'change', function(event){ //NO I18N
+						var files = this.files;
+						for (var i = 0; i < files.length; i++) {
+							if(!(new RegExp(fileNamePattern)).test(files[i].name))
+							{
+								if(typeof preventDefaultAction == 'function'){
+									preventDefaultAction(event);
+								}
+								this.value = '';
+								if(typeof parent.alertMsg == 'function'){
+									parent.alertMsg(errorMsg);
+								}
+								else if(typeof alertMsg == 'function'){
+									alertMsg(errorMsg);
+								}
+								return false;
+							}
+						}
+					}, true);
+				}
+			}
+		}	
+		}
+		catch(err){}		
+	}
+}
+
+</script>
+
+
+
+<script language="JavaScript" src="/webclient/vendor/js/jquery.js?build=6220" type="text/javascript"></script>
+<script language="JavaScript" src="/js/jquery-ui.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+var adsjQuery = jQuery.noConflict();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ADS Imports -->
+
+
+<!-- IDMF Imports -->
+
+
+
+<!-- SSP Imports -->
+
+
+
+
+
+
+
+
+
+
+<!-- Old Packages -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+
+ 
+
+
+
+
+
+
+
+<head>
+	
+
+<style>
+ .fntFamily{font-family: null;}
+ .fntSize{font-size:null;}
+ .common-textcolor{color:#243773 !important;}
+ .common-bgcolor{background:#243773 !important;}
+ .common-bordercolor{border-color:#243773 !important;}
+ .adsfntFamily{font-family: null !important;}
+ .adsfntSize{font-size:null !important;}
+ .adsfontSize10{font-size:null !important;}
+ .adsfontSize11{font-size:null !important;}
+</style>
+
+
+</head>
+
+</html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<script language="JavaScript" src="/js/form-util.js?build=6303" type="text/javascript"></script>
+	<script language="JavaScript" src="/adsf/js/common/JumpTo.js" type="text/javascript"></script>
+	<script language="JavaScript" src="/adsf/js/common/security-core.js" type="text/javascript"></script>
+	<script language="JavaScript" src="/adsf/js/common/security-url-validator.min.js" type="text/javascript"></script>
+	<script language="JavaScript" src="/adsf/js/common/sso/CustomSSO.js" type="text/javascript"></script>
+	<script language="JavaScript" src="/adsf/js/common/WindowHandler.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var insideAppsPane = true; //Settings insideAppsPane=true for ignoring loadframe issue in AD360
+	</script>
+
+	<script>
+		var csrfCookieFromRequest = 'b783a04d\x2D77ce\x2D4715\x2Dae52\x2D050de11f53af';
+		var csrfParam = 'adscsrf\x3Db783a04d\x2D77ce\x2D4715\x2Dae52\x2D050de11f53af';
+		var contextPath = "";
+		var login_status = '';
+
+		function showErrorOnLoad()
+		{
+			if($('#fTLoginAlert',parent.document).length==0)
+			{
+				var statusDiv='<div class="mini-status-alert status-alert status-alert-danger status-has-parent status-alert-xmd alert-dismissible ssp-display-none" role="alert" id="fTLoginAlert"><button type="button" class="close" onclick="closeDomainAlertDiv()"><span aria-hidden="true">&times;</span></button><div class="ssp-text-color-default ssp-align-center text-md"><i class="ssp-inline-icon icn-cross ssp-mt-m2"></i><span id="fTLoginAlertText"></span></div></div>'; //No I18N
+				$(parent.document.body).append(statusDiv);
+			}
+			if(login_status !=null && login_status!='')
+			{
+				adsjQuery("#fTLoginAlertText",parent.document).html(login_status);	//No I18N
+				adsjQuery("#fTLoginAlert",parent.document).delay(500).slideDown('slow') //No I18N
+			}
+		}
+
+		function closeDomainAlertDiv()
+		{
+			adsjQuery("div.status-alert").slideUp("slow"); // No I18N
+		}
+
+		function redirectTo(url)
+		{		
+			let useCustomizedHTML = 'false';
+			if(useCustomizedHTML == 'true')
+			{
+				window.parent.location.replace(url);
+			}
+			else
+			{
+				window.location.replace(url);
+			}	
+    	}	
+	</script>
+	<div style="display:none" id="csrfDiv">
+		<input type="hidden" id="adscsrfFromCookie" name="adscsrfFromCookie" value="b783a04d-77ce-4715-ae52-050de11f53af"/>
+	</div>
+	
+
+ 
+ <link href="styles/blue/style.css" rel="stylesheet" type="text/css">
+ 
+ <link href="/styles/styles.css" rel="stylesheet" type="text/css">
+ <link rel="stylesheet" href="/webclient/assets/login.css">
+ 	
+		<link rel="stylesheet" href="/styles/loginPageTheme.css">
+
+	
+	<style>
+		.employeeSearchContainer #employeeSearch.open {
+			background-color: #fff!important;
+		}
+		body .ssp-chart-link:hover {
+			background: #fff !important;
+		}
+	</style>
+ 
+ <link href="styles/customer-styles.css" rel="stylesheet" type="text/css">
+
+ <style>
+         .fntFamily{font-family: null;}
+         .fntSize{font-size:null;}
+         .common-textcolor{color:#243773 !important;}
+         .common-bgcolor{background:#243773 !important;}
+         .common-bordercolor{border-color:#243773 !important;}
+ </style>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<script language=JavaScript src="/js/popLayer.js?build=6303" type="text/javascript"></script>
+<script language=JavaScript src="/js/Esearch.js?build=6303" type="text/javascript"></script>
+<script language=JavaScript src="/js/common/LanguageList.js?build=6303" type="text/javascript"></script>
+<script language=JavaScript src="/js/validation.js?build=6303" type="text/javascript"></script>
+<script language=JavaScript src="/js/ValidateLogon.js?build=6303" type="text/javascript"></script>
+<script language=JavaScript src="/js/layout/Utils.js?build=6303" type="text/javascript"></script>
+<script language=JavaScript src="/js/CustomLogonScript.js?build=6303" type="text/javascript"></script>
+<script language=JavaScript src="/js/AjaxAPI.js?build=6303" type="text/javascript"></script>
+
+<script language=JavaScript src="/js/CommonUtil.js?build=6303" type="text/javascript"></script>
+<script>
+	function docid(id){return document.getElementById(id);}
+	adsjQuery(document).ready(function() {
+        function onInputChange(inputRef)
+        {
+            var state = adsjQuery(inputRef).length>0 && $(inputRef).val().length>0;
+            var passwordIcon = adsjQuery(inputRef).siblings('span.add-on.form-icn-password'); //NO I18N
+            passwordIcon.toggleClass('hide', state); //NO I18N
+        }
+        function restoreIconOnLoginPage(inputRef)
+        {
+        	var passwordIcon = adsjQuery(inputRef).siblings('span.add-on.form-icn-password'); //NO I18N
+        	var eyeIcon = adsjQuery(inputRef).siblings('span.add-on.form-icn-eye'); //NO I18N
+        	passwordIcon.removeClass('hide'); //NO I18N
+        	eyeIcon.addClass('hide'); //NO I18N
+        }
+        initPasswordVisibility(".form-input-with-icon .linput", "span.add-on.form-icn-eye", 'open', null, onInputChange, restoreIconOnLoginPage); //NO I18N
+    });
+</script>
+
+		<script language=JavaScript src="/js/common/LanguageList.js?build=6303" type="text/javascript"></script>
+
+
+</head>
+
+<div id="SSOStatus" style="position:fixed;z-index:500; left:45%; top:40%; display:none;">
+	<table cellspacing="0" cellpadding="5" border="0" class="sucessMsg" align="center" style="background:  rgb(242,242,242);border-color:#FFF; padding:5px 10px;">
+		<tr>
+			<td><img src="webclient/images/loader-sm.gif" > Loading...</td>
+		</tr>
+	</table>
+</div>
+
+<div id="IframeLoadingStatus" style="position:fixed;z-index:500; left:45%; top:40%; display:none;">
+	<table cellspacing="0" cellpadding="5" border="0" class="sucessMsg" align="center" style="background:  rgb(242,242,242);border-color:#FFF; padding:5px 10px;">
+		<tr>
+			<td><img src="webclient/images/loader-sm.gif" > Loading... </td>
+		</tr>
+	</table>
+</div>
+
+<style>
+.transparentbg
+{
+	background:none transparent;
+	overflow:hidden;
+}
+.loginBgImageClass
+{
+	background:url('images\2f ssp\2d login\2d page\2e png') no-repeat fixed;
+	background-size: cover;
+}
+</style>
+<body onload="createLangBox();createSearch('AnonymousAccess');" onclick="hideOnBlur(event, 'DOWN_ARROW', 'SEARCH_CRI')" class="transparentbg ssp_theme_custom ">
+
+
+
+
+	
+
+<script language="JavaScript" src="/js/report.js" type="text/javascript"></script>
+<script language="JavaScript" src="/js/popLayer.js" type="text/javascript"></script>
+<script>
+function alertBoxOk(callBackFunc, params){if(callBackFunc != "") { 
+	if(self!=top)
+	{
+		self.eval(callBackFunc)(params);
+    }
+    else{
+        parent.eval(callBackFunc)(params);
+	} 
+	}}
+function confirmBoxOk(callBackFunc, params){if(eval(callBackFunc)(params)!=false){closeAndUnFreeze('confirmBox');document.body.style.overflow = 'auto';if(eval(window.event)){window.event.returnValue=false;}}}
+function confirmBoxCancel(cancelFunc,cancelParams) 
+{
+	closeAndUnFreeze('confirmBox'); //No I18N
+	document.body.style.overflow = 'auto'; //No I18N
+	if(cancelFunc !="undefined" && cancelFunc!="") //Since already set to confirmBoxCancelFun <input> element, string check done, instead typeof.
+	{	
+		eval(cancelFunc)(cancelParams);
+	}
+	if(eval(window.event)){window.event.returnValue=false;}
+}
+function docid(id){return document.getElementById(id);}
+function alertMsg(msg, leftPos, topPos, scrollTop, fn)
+{
+	if(scrollTop == "" || (typeof scrollTop == "undefined")){window.scrollTo(0,0);}
+	if (window.ActiveXObject){var cW = document.body.clientWidth;var cH = document.body.clientHeight;}
+	else{var cW = window.innerWidth;var cH = window.innerHeight;}
+	var mouseLeft = new Number((cW/2) - 100);var mouseTop = new Number((cH/2) - 130);
+
+	if(typeof leftPos != "undefined" && leftPos != null){mouseLeft = leftPos;}
+	if(typeof topPos != "undefined" && topPos != null){mouseTop  = topPos;}
+
+	freezeAndOpen('alertBox', mouseLeft, mouseTop);//No I18N
+	var searchElem = document.getElementById('SEARCH_STRING');
+	if(eval(searchElem)) { searchElem.setAttribute('tabIndex', '-1'); }
+
+	docid('alertBox').style.left=mouseLeft+"px";
+	docid('alertBox').style.top=mouseTop+"px";
+	docid('alertBox').style.display="block";
+
+	docid('alert_InsertMsg').innerHTML = msg;
+	docid('freezeSearch').setAttribute('style','display:block; width:'+cW+100+'px; height:'+cH+100+'px;');
+	document.body.style.overflow = 'hidden';
+
+	if(typeof fn != "undefined" && fn != null){docid('alertBoxFun').value = fn;}
+	
+	setTimeout(function() { if(eval(docid('alertBoxFocus'))){try{docid('alertBoxFocus').focus();}catch(err){}}}, 20);
+	showHideCombBoxes('hidden');//No I18N 
+	return false;
+}
+function confirmMsg(msg, fun, par,cancelFunc,cancelParam)
+{
+	window.scrollTo(0,0);
+	if (window.ActiveXObject){var cW = document.body.clientWidth;var cH = document.body.clientHeight;}
+	else{var cW = window.innerWidth;var cH = window.innerHeight;}
+	var mouseLeft = new Number((cW/2) - 100);var mouseTop = new Number((cH/2) - 130);
+
+	freezeAndOpen('confirmBox', mouseLeft, mouseTop);//No I18N
+	docid('confirmBox').style.left=mouseLeft+"px";
+	docid('confirmBox').style.top=mouseTop+"px";
+	docid('confirmBox').style.display="block";
+	
+	docid('confirm_InsertMsg').innerHTML = msg;
+	docid('confirmBoxFun').value = fun;
+	docid('confirmBoxParams').value = par;
+	docid('confirmBoxCancelFun').value = cancelFunc;
+	docid('confirmBoxCancelParams').value = cancelParam;
+	docid('freezeSearch').setAttribute('style','width:'+cW+100+'px; height:'+cH+100+'px;');
+	document.body.style.overflow = 'hidden';
+	docid('freezeSearch').style.display="block";
+	setTimeout(function() { if(eval(docid('confirmBoxFocus'))){try{docid('confirmBoxFocus').focus();}catch(err){}}}, 20);
+	showHideCombBoxes('hidden');//No I18N	
+	return false;
+}
+function showHideCombBoxes(st){
+var selectObjs = document.getElementsByTagName('select');
+for(var i=0; i<selectObjs.length;i++){if(eval(selectObjs[i])){selectObjs[i].style.visibility=st;}}}
+</script>
+
+
+<div class="alertDiv" id="confirmBox" style="position:absolute;z-index:5000; left:90px; top:85px; display:none;padding:2px;">
+	<input type="hidden" id="confirmBoxFun">
+	<input type="hidden" id="confirmBoxParams">
+	<input type="hidden" id="confirmBoxCancelFun">
+	<input type="hidden" id="confirmBoxCancelParams">
+	<div class="common-bgcolor padding5">
+		<div class="flLeft normalBoldFont whitefont fntFamily fontSize11" id="CONFIRM_BOX_HEADER">Confirm Message</div>
+		<div class="flRight divCloseBtn" onclick="closeAndUnFreeze('confirmBox')"></div>
+		<div class="clearAll"></div>
+	</div>
+	<div class="padding10">
+		<div class="flLeft confirmboxIcon" id="CONFIRM_BOX_ICON"></div>
+		<div style="padding-top:5px" id="confirm_InsertMsg" class="fntFamily fntSize marginLeft40"></div>
+		<div class="clearAll"></div>
+	</div>	
+	<div class="marginLeft100" style="margin-bottom:5px">
+		<div class="flLeft alertBtn curPoint" onclick="confirmBoxOk(document.getElementById('confirmBoxFun').value, document.getElementById('confirmBoxParams').value)">
+			<div class="flLeft left"></div>
+			<div class="flLeft center"><a href="javascript:void(0)" id="confirmBoxFocus" class="normalFont fntSize fntFamily" onkeydown="if(event.keyCode==13){confirmBoxOk(docid('confirmBoxFun').value, docid('confirmBoxParams').value);}" >OK</a></div>
+			<div class="flLeft right"></div>
+		</div>
+
+		<div class="flLeft">&nbsp;</div>
+
+		<div class="flLeft alertBtn curPoint" onclick="confirmBoxCancel(document.getElementById('confirmBoxCancelFun').value, document.getElementById('confirmBoxCancelParams').value)">
+			<div class="flLeft left"></div>
+			<div class="flLeft center fntSize fntFamily">Cancel</div>
+			<div class="flLeft right"></div>
+		</div>
+	</div>
+	<div class="clearAll"></div>
+</div>
+
+
+<div class="alertDiv" id="alertBox" style="position:absolute;z-index:5000; left:90px; top:85px; display:none;padding:2px;">
+	<input type="hidden" id="alertBoxFun">
+	<input type="hidden" id="alertBoxParams">
+	<div class="common-bgcolor padding5">
+		<div class="flLeft normalBoldFont whitefont fntFamily fontSize11">Alert Message</div>
+		<div class="flRight divCloseBtn" onclick="closeAndUnFreeze('alertBox'); alertBoxOk(docid('alertBoxFun').value, docid('alertBoxParams').value);"></div>
+		<div class="clearAll"></div>
+	</div>
+	<div class="padding10">
+		<div class="flLeft alertboxIcon"></div>
+		<div id="alert_InsertMsg" class="fntFamily fntSize marginLeft40"></div>
+		<div class="clearAll"></div>
+	</div>	
+	<div style="margin-left:125px;margin-bottom:5px;float:left">
+		<div class="alertBtn curPoint" onclick="closeAndUnFreeze('alertBox'); alertBoxOk(docid('alertBoxFun').value, docid('alertBoxParams').value);">
+			<div class="flLeft left"></div>
+			<div class="flLeft center"><a href="javascript:void(0)" id="alertBoxFocus" class="normalFont fntSize fntFamily"  >OK</a></div>
+			<div class="flLeft right"></div>
+		</div>
+	</div>
+	<div class="clearAll"></div>
+</div>
+
+<div id="SMALL_STATUS_BOX" style="position:absolute;z-index:5000; left:540px; top:260px; width:400px; display:none;">
+	<table cellspacing="0" cellpadding="0" border="0" width="80%" class="FailureMsg fntSize fntFamily">
+	<tr>
+		<td align="center" id="SSB_TXT"></td>
+		<td align="right" valign="top"><div class="divCloseBtn" onclick="hCEle('SMALL_STATUS_BOX','none')" ></div></td>
+	</tr>
+	</table>	
+</div>
+
